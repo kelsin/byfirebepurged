@@ -30,6 +30,7 @@ group :development, :test do
   # Use Capistrano for deployment
   gem 'capistrano-rails'
   gem 'capistrano-passenger'
+  gem 'capistrano-bundler'
   gem 'capistrano-rbenv'
 
   # Use rspec for testing
