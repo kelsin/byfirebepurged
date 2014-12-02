@@ -3,11 +3,7 @@ Rails.application.routes.draw do
   get '/auth/:provider/callback', :to => 'sessions#create', :defaults => { :format => :json }
 
   get '/auth/bnet', :as => :bnet, :defaults => { :format => :json }
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
-
-  # You can have the root of your site routed with "root"
-  # root 'welcome#index'
+  root 'sessions#index', :defaults => { :format => :json }
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

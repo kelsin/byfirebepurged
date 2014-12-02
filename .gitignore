@@ -18,5 +18,8 @@
 # SSH Keys
 config/deploy_id_rsa
 
+# Docs
+doc
+
 # Coverage
 coverage

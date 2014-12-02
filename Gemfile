@@ -57,4 +57,7 @@ group :development, :test do
   # Guard
   gem 'guard-rspec', require: false
   gem 'rb-readline'
+
+  # Docs
+  gem 'hanna-nouveau'
 end
