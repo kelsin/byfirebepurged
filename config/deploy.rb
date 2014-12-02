@@ -7,4 +7,4 @@ set :repo_url, 'git@github.com:kelsin/byfirebepurged.git'
 set :ssh_options, keys: ["config/deploy_id_rsa"], forward_agent: true if File.exist?("config/deploy_id_rsa")
 set :linked_dirs, fetch(:linked_dirs, []).push('bin', 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle')
 set :rbenv_ruby, '2.1.3'
-set :default_env, { 'DATABASE_URL' => ENV['DATABASE_URL'] }
+set :default_env, { 'DATABASE_URL' => ENV['CAP_DATABASE_URL'] }

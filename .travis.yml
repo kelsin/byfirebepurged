@@ -5,7 +5,7 @@ env:
     - BNET_SECRET=bnet-secret
     - secure: "SSt9PkbKGuFdeUxP+S/AISMDSUpMmc+fm8HtXDtcc0pfWmu6vboo0dDxVJ8a0TqOLqS91zhisvacA9ropz/vZL3SoLkww3vNaljN1tSZcC2CTGrndO1CUXCcSMT00DI+CEp9ZXYW3MHq+KDtkkUrcIsjrZPQit5Z5X8jUzKA87E="
     - secure: "fPMudjrUI+AJ/AQi3VtvFI+k+pyKBl0S7k0kIIagtjHSsyxMgaWI2JmisbPezdi/rnypfI7Ro9WtG2n9krjuXN42BilOD13AzK42i6554Eh2w9noO6qslfZuuWBIKoVaKCy6afrbQUpMX3zOixHAjwwejg5oWBBXLv7DuSUJubg="
-    - secure: "O17mfNWru14De3QTbVZp3yHD+rzFrWq95CP3NBfylUSw4zR0juYaIS+yH+qbSYymootVWR4pQes4w7qjI2vuZeNpF51jQNRyJ9WxDZU7SvAaG/2k7xfxpIoc63jzvxZtKX0PVIFmlvdVqSzFLaKvz2eLci9I7vSWnH1itQLdxps="
+    - secure: "wCt6TIr80EftcjZQZncoQ7MNhm+AKxgTn9XpHqb3b4epOOKUopcoLBZXLPmUUHkFwVW/AZtj0T1JRK/3mZVPvpuX8OYWjgsLxsXrMc3pE0eKpZVCV9KilF003QOBtLO48I6XHYpVG/qCHsDzYVJMI/cYGjC1Bab11knygsbrgb8="
 cache:
   bundler: true
 after_success:
