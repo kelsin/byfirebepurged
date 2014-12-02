@@ -5,6 +5,14 @@ require 'factory_girl_rails'
 require 'database_cleaner'
 require 'api_helper'
 require 'json_spec'
+require 'vcr'
+
+VCR.configure do |c|
+  c.cassette_library_dir = 'spec/cassettes'
+  c.hook_into :webmock
+  c.ignore_localhost = true
+  c.ignore_hosts 'codeclimate.com'
+end
 
 SimpleCov.start 'rails' do
   merge_timeout 1800
