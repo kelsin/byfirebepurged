@@ -33,6 +33,15 @@ group :development, :test do
   gem 'capistrano-bundler'
   gem 'capistrano-rbenv'
 
+  # Guard
+  gem 'guard-rspec', require: false
+  gem 'rb-readline'
+
+  # Docs
+  gem 'hanna-nouveau', require: false
+end
+
+group :test do
   # Use rspec for testing
   gem 'rspec-rails'
 
@@ -53,11 +62,4 @@ group :development, :test do
 
   # Factories
   gem 'factory_girl_rails'
-
-  # Guard
-  gem 'guard-rspec', require: false
-  gem 'rb-readline'
-
-  # Docs
-  gem 'hanna-nouveau', require: false
 end
