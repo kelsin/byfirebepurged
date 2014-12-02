@@ -21,4 +21,4 @@ test:
   database: db/test.sqlite3
 
 production:
-  url: <%= ENV['BFBP_DATABASE_URL'] %>
+  url: <%= ENV['DATABASE_URL'] %>

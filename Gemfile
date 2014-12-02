@@ -17,8 +17,7 @@ gem 'newrelic_rpm'
 # Can Can for Authorization
 gem 'cancan'
 
-# Devise and Omniauth for Authentication
-gem 'devise'
+# Omniauth-Bnet for Authentication
 gem 'omniauth-bnet'
 
 group :development, :test do
