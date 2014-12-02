@@ -1,5 +1,6 @@
 env:
   global:
+    - RAILS_ENV=test
     - BNET_ID=bnet-id
     - BNET_SECRET=bnet-secret
     - secure: "SSt9PkbKGuFdeUxP+S/AISMDSUpMmc+fm8HtXDtcc0pfWmu6vboo0dDxVJ8a0TqOLqS91zhisvacA9ropz/vZL3SoLkww3vNaljN1tSZcC2CTGrndO1CUXCcSMT00DI+CEp9ZXYW3MHq+KDtkkUrcIsjrZPQit5Z5X8jUzKA87E="
