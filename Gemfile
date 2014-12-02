@@ -29,6 +29,10 @@ group :development, :test do
   gem 'capistrano-passenger'
   gem 'capistrano-rbenv'
 
+  # Use rspec for testing
+  gem 'rspec-rails'
+
+  # Code Coverage
   gem 'simplecov', require: false
   gem "codeclimate-test-reporter", require: false
 
