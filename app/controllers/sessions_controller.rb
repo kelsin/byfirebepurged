@@ -2,7 +2,7 @@ class SessionsController < ApplicationController
   def new
     raise Exceptions::ByFireBePurgedError, 'Must provide a redirect value' unless params[:redirect]
 
-    redirect = URI.parse(params[:redirect])
+    redirect = URI.parse(params[:redirect]) rescue nil
 
     unless redirect.kind_of?(URI::HTTP) or redirect.kind_of?(URI::HTTPS)
       raise Exceptions::ByFireBePurgedError, 'Redirect value must be a valid http or https url'

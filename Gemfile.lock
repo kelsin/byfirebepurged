@@ -88,6 +88,9 @@ GEM
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
     json (1.8.1)
+    json_spec (1.1.4)
+      multi_json (~> 1.0)
+      rspec (>= 2.0, < 4.0)
     jwt (1.2.0)
     listen (2.8.3)
       celluloid (>= 0.15.2)
@@ -220,8 +223,10 @@ DEPENDENCIES
   factory_girl_rails
   guard-rspec
   jbuilder (~> 2.0)
+  json_spec
   newrelic_rpm
   omniauth-bnet
+  rack-test
   rails (= 4.1.7)
   rb-readline
   rspec-rails

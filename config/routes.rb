@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
-  post '/login', to: 'sessions#new', :as => :login
-  get '/auth/:provider/callback', :to => 'sessions#create'
+  post '/login', to: 'sessions#new', :as => :login, :defaults => { :format => :json }
+  get '/auth/:provider/callback', :to => 'sessions#create', :defaults => { :format => :json }
 
-  get '/auth/bnet', :as => :bnet
+  get '/auth/bnet', :as => :bnet, :defaults => { :format => :json }
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

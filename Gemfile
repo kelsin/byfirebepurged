@@ -39,6 +39,10 @@ group :development, :test do
   # Database Cleaning
   gem 'database_cleaner'
 
+  # API Testing
+  gem 'rack-test', require: "rack/test"
+  gem 'json_spec'
+
   # Mocking Net Requests
   gem 'webmock'
   gem 'vcr'
