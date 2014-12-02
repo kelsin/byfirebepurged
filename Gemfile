@@ -59,5 +59,5 @@ group :development, :test do
   gem 'rb-readline'
 
   # Docs
-  gem 'hanna-nouveau'
+  gem 'hanna-nouveau', require: false
 end
