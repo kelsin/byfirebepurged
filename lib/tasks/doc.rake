@@ -18,14 +18,15 @@ namespace :doc do
     rdoc.rdoc_files.include('README.rdoc')
   end
 
-  task :deploy => :reapp do
+  task :deploy => :app do
     Dir.chdir('doc') do
-      `git init`
-      `git checkout -b gh-pages`
-      `git remote add origin git@github.com:kelsin/docs.byfirebepurged.com.git`
+      `git clone git@github.com:kelsin/docs.byfirebepurged.com.git temp`
+      `mv temp/.git .git`
+      `rm -rf temp`
       `git add -A`
-      `git commit -am "By Fire Be Purged Documentation"`
-      `git push -f -u origin gh-pages`
+      `git commit -m "Updating docs: #{Time.now.utc}"`
+      `git push`
+      `rm -rf .git`
     end
   end
 end
