@@ -7,7 +7,7 @@ namespace :doc do
   RDoc::Task.new :app do |rdoc|
     rdoc.rdoc_dir = 'doc'
     rdoc.title    = 'By Fire Be Purged'
-    rdoc.main     = 'README.rdoc' # define README_FOR_APP as index
+    rdoc.main     = 'README.md'
     rdoc.generator = 'hanna'
 
     rdoc.options << '--charset' << 'utf-8'
@@ -15,7 +15,7 @@ namespace :doc do
     rdoc.rdoc_files.include('app/**/*.rb')
     rdoc.rdoc_files.include('config/**/*.rb')
     rdoc.rdoc_files.include('lib/**/*.rb')
-    rdoc.rdoc_files.include('README.rdoc')
+    rdoc.rdoc_files.include('README.md')
   end
 
   task :deploy => :app do

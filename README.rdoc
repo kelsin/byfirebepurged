@@ -1,9 +1,0 @@
-= By Fire Be Purged
-
-{rdoc-image:http://img.shields.io/travis/kelsin/byfirebepurged.svg}[https://travis-ci.org/kelsin/byfirebepurged]
-{rdoc-image:http://img.shields.io/codeclimate/coverage/github/kelsin/byfirebepurged.svg}[https://codeclimate.com/github/kelsin/byfirebepurged/code?sort=covered_percent&sort_direction=asc]
-{rdoc-image:http://img.shields.io/codeclimate/github/kelsin/byfirebepurged.svg}[https://codeclimate.com/github/kelsin/byfirebepurged]
-{rdoc-image:http://img.shields.io/badge/license-MIT-blue.svg}[https://github.com/kelsin/byfirebepurged/blob/master/LICENSE]
-{rdoc-image:https://img.shields.io/gratipay/kelsin.svg}[https://gratipay.com/kelsin/]
-
-An API for scheduling raids
