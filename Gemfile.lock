@@ -216,6 +216,7 @@ PLATFORMS
 
 DEPENDENCIES
   cancan
+  capistrano-bundler
   capistrano-passenger
   capistrano-rails
   capistrano-rbenv
