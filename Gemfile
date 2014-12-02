@@ -21,6 +21,9 @@ gem 'cancan'
 gem 'omniauth-bnet'
 
 group :development, :test do
+  # Use Thin for development
+  gem 'thin'
+
   # Use Capistrano for deployment
   gem 'capistrano-rails'
   gem 'capistrano-passenger'
