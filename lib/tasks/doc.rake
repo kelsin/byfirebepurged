@@ -20,7 +20,9 @@ namespace :doc do
 
   task :deploy => :app do
     Dir.chdir('doc') do
-      `git clone git@github.com:kelsin/docs.byfirebepurged.com.git -n --separate-git-dir .git`
+      `git clone git@github.com:kelsin/docs.byfirebepurged.com.git -n temp`
+      `mv temp/.git .git`
+      `rm -rf temp`
       `git add -A`
       `git commit -m "Updating docs: #{Time.now.utc}"`
       `git push`
