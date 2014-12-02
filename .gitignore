@@ -17,6 +17,3 @@
 
 # SSH Keys
 config/deploy_id_rsa
-
-# Bundle bin directory
-bin
