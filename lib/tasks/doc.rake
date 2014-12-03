@@ -13,7 +13,8 @@ namespace :doc do
     rdoc.options << '--charset' << 'utf-8'
 
     rdoc.rdoc_files.include('app/**/*.rb')
-    rdoc.rdoc_files.include('config/**/*.rb')
+    rdoc.rdoc_files.include('config/initializers/exceptions.rb')
+    rdoc.rdoc_files.include('config/initializers/omniauth.rb')
     rdoc.rdoc_files.include('lib/**/*.rb')
     rdoc.rdoc_files.include('README.md')
   end

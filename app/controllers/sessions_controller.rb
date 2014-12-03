@@ -1,4 +1,37 @@
+require 'bnet'
+
 class SessionsController < ApplicationController
+  skip_before_action :authenticate
+
+  @@bnet = Bnet.new
+
+  # Provides some static data to point users to the proper API requests and
+  # websites.
+  def index
+  end
+
+  # Attempts to login to the api. You must pass in a json body in the following form:
+  #
+  #     {
+  #       "redirect": "https://localhost/?key="
+  #     }
+  #
+  # The response will look like:
+  #
+  #     {
+  #       "method": "Battle.net OAuth 2.0",
+  #       "href": "https://localhost:3000/auth/bnet?key=960c109e-af1f-4012-9e8a-31783a3e9270"
+  #     }
+  #
+  # To complete a login, forward your user to the provided href value, and then
+  # we will redirect to your original redirect value with your proper API key
+  # appended. In our example we would redirect to a url like:
+  #
+  #     https://localhost/?key=51032c55-5ff6-4ee7-887c-3d2e2f3587e1
+  #
+  # From now on just append the following header to all API requests:
+  #
+  #     Authorization: apikey 51032c55-5ff6-4ee7-887c-3d2e2f3587e1
   def new
     raise Exceptions::ByFireBePurgedError, 'Must provide a redirect value' unless params[:redirect]
 
@@ -12,13 +45,79 @@ class SessionsController < ApplicationController
                           :redirect => params[:redirect])
   end
 
+  # This is the OAuth redirect route that we use when using Battle.net's OAuth
+  # authentication.
+  #
+  # This route creates or saves the user with the proper account_id and
+  # battletag and then loads their WoW characters and redirects to the original
+  # redirect url provided by the user when they hit +new+
   def create
-    logger.debug auth_hash
+    # First find the login record created for this authentication attempt
+    @login = Login.find_by_key(params_hash['key'])
+    raise Exceptions::ByFireBePurgedError, "Can not find login request for #{params_hash['key']}" unless @login
+
+    # Now find or create the account for this Battle.net account
+    begin
+      @account = Account.find_or_create_by(:account_id => auth_hash['info']['id']) do |account|
+        account.battletag = auth_hash['info']['battletag']
+      end
+    rescue ActiveRecord::RecordNotUnique
+      retry
+    end
+    raise Exceptions::ByFireBePurgedError, 'Error attempting to create/update account' unless @account
+
+    # Now create a session for this user
+    begin
+      @session = Session.find_or_create_by(:access_token => auth_hash['credentials']['token'],
+                                           :account_id => @account.id) do |session|
+        session.key = SecureRandom.uuid
+      end
+    rescue ActiveRecord::RecordNotUnique
+      retry
+    end
+    raise Exceptions::ByFireBePurgedError, 'Error attempting to create/update session' unless @session
+
+    update_characters if @account.updated_at < 1.hour.ago
+
+    redirect_to "#{@login.redirect}#{@session.key}"
   end
 
   protected
 
+  # Helper to easily get the omniauth data from the request
   def auth_hash
     request.env['omniauth.auth']
+  end
+
+  def params_hash
+    request.env['omniauth.params']
+  end
+
+  private
+
+  def update_characters
+    seen = Set.new
+
+    @@bnet.characters(@session.access_token).each do |character|
+      guild = Guild.find_or_create_by(:name => character['guild'],
+                                      :realm => character['guildRealm'])
+
+      Character.find_or_initialize_by(:account_id => @session.account_id,
+                                      :name => character['name'],
+                                      :realm => character['realm'])
+        .update(:guild_id => guild.try(:id),
+                :image_url => image_url(character),
+                :level => character['level'],
+                :race_id => character['race'],
+                :class_id => character['class'],
+                :gender_id => character['gender'])
+
+      seen.add(:name => character['name'],
+               :realm => character['realm'])
+    end
+  end
+
+  def image_url(character)
+    "http://us.battle.net/static-render/us/#{character['thumbnail']}?alt=wow/static/images/2d/avatar/#{character['race']}-#{character['gender']}.jpg"
   end
 end

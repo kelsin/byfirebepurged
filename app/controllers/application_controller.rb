@@ -1,7 +1,21 @@
 class ApplicationController < ActionController::Base
-  rescue_from Exceptions::ByFireBePurgedError, :with => :error
+  rescue_from ::Exceptions::ByFireBePurgedError, :with => :error
+
+  before_action :authenticate
 
   private
+
+  def authenticate
+    authorization = request.headers['Authorization']
+    m = /apikey ([\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12})/.match(authorization)
+    key = m[1]
+
+    raise Exceptions::ByFireBePurgedError, "Unable to parse apikey: #{authorization}" unless key
+
+    @session = Session.find_by_key(key)
+
+    raise Exceptions::ByFireBePurgedError, "Invalid apikey: #{key}" unless @session
+  end
 
   def unauthorized(e)
     render :json => {:error => e.message}, :status => :unauthorized
