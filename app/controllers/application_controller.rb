@@ -1,10 +1,21 @@
 class ApplicationController < ActionController::Base
   rescue_from ::Exceptions::ByFireBePurgedError, :with => :error
-  rescue_from ::ActionDispatch::ParamsParser::ParseError, :with => :error
+  rescue_from ::CanCan::AccessDenied, :with => :error
 
   before_action :authenticate
+  check_authorization
+
+  helper_method :current_account
 
   private
+
+  def current_account
+    @account
+  end
+
+  def current_ability
+    @current_ability ||= Ability.new(current_account)
+  end
 
   def authenticate
     authorization = request.headers['Authorization']

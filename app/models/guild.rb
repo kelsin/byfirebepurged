@@ -5,8 +5,6 @@ class Guild < ActiveRecord::Base
   validates :name, :presence => true
   validates :realm, :presence => true
 
-  default_scope { distinct }
-
   def to_permission
     "Guild|#{name}:#{realm}"
   end

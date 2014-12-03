@@ -2,10 +2,12 @@ class PermissionsController < ApplicationController
   before_action :load_permissioned
 
   def index
+    authorize! :read, @permissioned
     @permissions = @permissioned.permissions
   end
 
   def create
+    authorize! :manage, @permissioned
     @permission = Permission.new(permission_params)
     @permissioned.permissions << @permission
   end

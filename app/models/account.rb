@@ -1,13 +1,16 @@
 class Account < ActiveRecord::Base
   has_many :characters
-  has_many :guilds, :through => :characters
   has_many :signups, :through => :characters
   has_many :raids, :through => :signups
   has_many :created_raids, :class_name => 'Raid', :inverse_of => :account
 
   has_many :sessions
 
-  default_scope { includes(:characters, :guilds) }
+  default_scope { includes(:characters) }
+
+  def guilds
+    characters.map(&:guild).compact.uniq.sort
+  end
 
   def signup_for(raid)
     self.signups.find do |signup|
@@ -27,6 +30,10 @@ class Account < ActiveRecord::Base
     (permissions & raid.admins.map(&:key)).present?
   end
 
+  def available?(raid)
+    (permissions & raid.permissions.map(&:key)).present?
+  end
+
   def creator?(raid)
     self.id == raid.account_id
   end
@@ -36,7 +43,7 @@ class Account < ActiveRecord::Base
   end
 
   def available_raids
-    Raid.where(:permissions => { :key => permissions })
+    @available_raids ||= Raid.where(:permissions => { :key => permissions })
   end
 
   def permissions
