@@ -12,7 +12,8 @@ class ApplicationController < ActionController::Base
 
     raise Exceptions::ByFireBePurgedError, "Unable to parse apikey: #{authorization}" unless key
 
-    @session = Session.find_by_key(key)
+    @session = Session.includes(:account).find_by_key(key)
+    @account = @session.account
 
     raise Exceptions::ByFireBePurgedError, "Invalid apikey: #{key}" unless @session
   end
