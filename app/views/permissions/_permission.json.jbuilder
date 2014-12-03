@@ -1,1 +1,1 @@
-json.extract! permission, :id, :level, :key
+json.extract! permission, :id, :permissioned_id, :permissioned_type, :level, :key

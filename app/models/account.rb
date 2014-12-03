@@ -13,7 +13,7 @@ class Account < ActiveRecord::Base
   end
 
   def signup_for(raid)
-    self.signups.find do |signup|
+    raid.signups.find do |signup|
       signup.raid_id == raid.id
     end
   end
@@ -43,7 +43,7 @@ class Account < ActiveRecord::Base
   end
 
   def available_raids
-    @available_raids ||= Raid.where(:permissions => { :key => permissions })
+    @available_raids ||= Raid.includes(:signups => { :character => :guild }).where(:permissions => { :key => permissions })
   end
 
   def permissions

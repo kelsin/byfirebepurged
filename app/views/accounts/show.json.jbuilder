@@ -6,12 +6,9 @@ json.account do
 end
 
 json.characters @account.characters do |character|
-  json.extract! character,
-                :id, :name, :realm, :class_id, :race_id, :gender_id,
-                :level, :item_level, :image_url
-  json.guild character.guild_id
+  json.partial! 'characters/character', :character => character
 end
 
 json.guilds @account.guilds do |guild|
-  json.extract! guild, :id, :name, :realm
+  json.partial! 'guilds/guild', :guild => guild
 end

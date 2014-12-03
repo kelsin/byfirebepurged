@@ -2,7 +2,7 @@ class PermissionsController < ApplicationController
   before_action :load_permissioned
 
   def index
-    authorize! :read, @permissioned
+    authorize! :manage, @permissioned
     @permissions = @permissioned.permissions
   end
 
@@ -20,7 +20,7 @@ class PermissionsController < ApplicationController
 
   def load_permissioned
     if params[:raid_id]
-      @permissioned = Raid.find(params[:raid_id])
+      @permissioned = Raid.unscoped.with_permissions.find(params[:raid_id])
     end
   end
 end

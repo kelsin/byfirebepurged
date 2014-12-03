@@ -12,3 +12,5 @@ json.groups do
   json.number raid.groups
   json.extract! raid, :size, :tanks, :healers
 end
+
+json.signups raid.signup_ids

@@ -5,7 +5,9 @@ Rails.application.routes.draw do
   end
 
   # Raids
-  resources :raids, :concerns => :permissioned
+  resources :raids, :concerns => :permissioned do
+    resources :signups
+  end
 
   # Account
   resource :account

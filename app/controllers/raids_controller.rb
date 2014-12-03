@@ -5,10 +5,17 @@ class RaidsController < ApplicationController
     @raids.each do |raid|
       authorize! :read, raid
     end
+
+    @all_signups = @raids.inject([]) do |signups, raid|
+      signups + raid.signups
+    end
+    @all_characters = @all_signups.map(&:character).uniq.sort
+    @all_guilds = @all_characters.map(&:guild).uniq.sort
   end
 
   def show
-    @raid = Raid.find(params[:id])
+    @raid = Raid.includes(:signups => { :character => :guild }).where(:id => params[:id]).first
+
     authorize! :read, @raid
   end
 
