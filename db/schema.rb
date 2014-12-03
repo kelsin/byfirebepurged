@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141202054704) do
+ActiveRecord::Schema.define(version: 20141203171515) do
 
   create_table "accounts", force: true do |t|
     t.string   "battletag"
@@ -58,6 +58,15 @@ ActiveRecord::Schema.define(version: 20141202054704) do
 
   add_index "logins", ["key", "created_at"], name: "index_logins_on_key_and_created_at"
 
+  create_table "permissions", force: true do |t|
+    t.integer  "permissioned_id",   null: false
+    t.string   "permissioned_type", null: false
+    t.string   "level",             null: false
+    t.string   "key",               null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "raids", force: true do |t|
     t.string   "name",                       null: false
     t.datetime "date",                       null: false
@@ -67,8 +76,7 @@ ActiveRecord::Schema.define(version: 20141202054704) do
     t.integer  "groups",     default: 1,     null: false
     t.integer  "size",       default: 30,    null: false
     t.integer  "tanks",      default: 2,     null: false
-    t.integer  "healing",    default: 6,     null: false
-    t.integer  "dps",        default: 0,     null: false
+    t.integer  "healers",    default: 6,     null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

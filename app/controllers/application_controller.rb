@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   rescue_from ::Exceptions::ByFireBePurgedError, :with => :error
+  rescue_from ::ActionDispatch::ParamsParser::ParseError, :with => :error
 
   before_action :authenticate
 
@@ -12,14 +13,13 @@ class ApplicationController < ActionController::Base
 
     raise Exceptions::ByFireBePurgedError, "Unable to parse apikey: #{authorization}" unless key
 
-    @session = Session.includes(:account => { :characters => { :signups => :raids }}).find_by_key(key)
+    @session = Session.includes(:account).find_by_key(key)
+    raise Exceptions::ByFireBePurgedError, "Invalid apikey: #{key}" unless @session
+
     @account = @session.account
     @characters = @account.characters
     @guilds = @account.guilds
     @signups = @account.signups
-    @raids = @account.raids
-
-    raise Exceptions::ByFireBePurgedError, "Invalid apikey: #{key}" unless @session
   end
 
   def unauthorized(e)

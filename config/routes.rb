@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
+  # Permissions
+  concern :permissioned do
+    resources :permissions
+  end
+
   # Raids
-  resources :raids
+  resources :raids, :concerns => :permissioned
 
   # Account
   resource :account

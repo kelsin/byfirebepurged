@@ -12,8 +12,7 @@ class CreateRaids < ActiveRecord::Migration
       t.integer :groups, :default => 1, :null => false
       t.integer :size, :default => 30, :null => false
       t.integer :tanks, :default => 2, :null => false
-      t.integer :healing, :default => 6, :null => false
-      t.integer :dps, :default => 0, :null => false
+      t.integer :healers, :default => 6, :null => false
 
       t.timestamps
     end

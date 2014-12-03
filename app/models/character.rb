@@ -4,4 +4,10 @@ class Character < ActiveRecord::Base
 
   has_many :signups
   has_many :raids, :through => :signups
+
+  default_scope { includes(:guild) }
+
+  def to_permission
+    "Character|#{name}:#{realm}"
+  end
 end
