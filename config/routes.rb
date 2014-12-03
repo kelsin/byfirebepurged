@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  # Raids
+  resources :raids
+
   # Account
   resource :account
 
