@@ -58,26 +58,29 @@ class SessionsController < ApplicationController
 
     # Now find or create the account for this Battle.net account
     begin
-      @account = Account.find_or_create_by(:account_id => auth_hash['info']['id']) do |account|
-        account.battletag = auth_hash['info']['battletag']
-      end
+      @account = Account.find_or_initialize_by(:account_id => auth_hash['info']['id'])
     rescue ActiveRecord::RecordNotUnique
       retry
     end
-    raise Exceptions::ByFireBePurgedError, 'Error attempting to create/update account' unless @account
+
+    unless @account and @account.update(:battletag => auth_hash['info']['battletag'])
+      raise Exceptions::ByFireBePurgedError, 'Error attempting to find and update account'
+    end
 
     # Now create a session for this user
     begin
-      @session = Session.find_or_create_by(:access_token => auth_hash['credentials']['token'],
-                                           :account_id => @account.id) do |session|
-        session.key = SecureRandom.uuid
-      end
+      @session = Session.find_or_initialize_by(:access_token => auth_hash['credentials']['token'],
+                                               :account_id => @account.id)
     rescue ActiveRecord::RecordNotUnique
       retry
     end
-    raise Exceptions::ByFireBePurgedError, 'Error attempting to create/update session' unless @session
 
-    update_characters if @account.updated_at < 1.hour.ago
+    unless @session and @session.update(:key => SecureRandom.uuid)
+      raise Exceptions::ByFireBePurgedError, 'Error attempting to find and update session'
+    end
+
+    # Update characters if it's been an hour since last login
+    update_characters if @account.characters.max_by(&:updated_at).updated_at < 1.hour.ago
 
     redirect_to "#{@login.redirect}#{@session.key}"
   end
