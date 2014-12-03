@@ -80,7 +80,8 @@ class SessionsController < ApplicationController
     end
 
     # Update characters if it's been an hour since last login
-    update_characters if @account.characters.max_by(&:updated_at).updated_at < 1.hour.ago
+    latestCharacter = @account.characters.max_by(&:updated_at)
+    update_characters if latestCharacter.nil? or latestCharacter.updated_at < 1.hour.ago
 
     redirect_to "#{@login.redirect}#{@session.key}"
   end
