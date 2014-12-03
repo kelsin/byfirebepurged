@@ -14,11 +14,14 @@ class SignupsController < ApplicationController
     authorize! :create, @signup
 
     raise Exceptions::ByFireBePurgedError, 'Error signing up for raid' unless @signup.save
+    render :show
   end
 
-  def show
+  def update
     @signup = @raid.signups.find(params[:id])
-    authorize! :read, @signup
+    authorize! :update, @signup
+    raise Exceptions::ByFireBePurgedError, 'Error saving signup' unless @signup.update(signup_params)
+    render :show
   end
 
   def destroy
@@ -26,12 +29,18 @@ class SignupsController < ApplicationController
     authorize! :destroy, @signup
 
     raise Exceptions::ByFireBePurgedError, 'Error deleting signup' unless @signup.destroy
+    render :show
+  end
+
+  def show
+    @signup = @raid.signups.find(params[:id])
+    authorize! :read, @signup
   end
 
   private
 
   def signup_params
-    params.require(:signup).permit(:character_id)
+    params.require(:signup).permit(:character_id, :note, :preferred, :seated)
   end
 
   def load_raid
