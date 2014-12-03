@@ -103,8 +103,11 @@ class SessionsController < ApplicationController
     seen = Set.new
 
     @@bnet.characters(@session.access_token).each do |character|
-      guild = Guild.find_or_create_by(:name => character['guild'],
-                                      :realm => character['guildRealm'])
+      guild = nil
+      if character['guild'].present? and character['guildRealm'].present?
+        guild = Guild.find_or_create_by(:name => character['guild'],
+                                        :realm => character['guildRealm'])
+      end
 
       Character.find_or_initialize_by(:account_id => @session.account_id,
                                       :name => character['name'],

@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   # Account
-  resource :user
+  resource :account
 
   # Sessions
   post '/login', to: 'sessions#new', :as => :login, :defaults => { :format => :json }
