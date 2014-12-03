@@ -82,19 +82,19 @@ class SessionsController < ApplicationController
     redirect_to "#{@login.redirect}#{@session.key}"
   end
 
-  protected
+  private
 
   # Helper to easily get the omniauth data from the request
   def auth_hash
     request.env['omniauth.auth']
   end
 
+  # Helper to easily get the omniauth params from the request
   def params_hash
     request.env['omniauth.params']
   end
 
-  private
-
+  # Update the accounts characters from the Battle.net api
   def update_characters
     seen = Set.new
 
@@ -117,6 +117,7 @@ class SessionsController < ApplicationController
     end
   end
 
+  # Full image url from api character data
   def image_url(character)
     "http://us.battle.net/static-render/us/#{character['thumbnail']}?alt=wow/static/images/2d/avatar/#{character['race']}-#{character['gender']}.jpg"
   end
