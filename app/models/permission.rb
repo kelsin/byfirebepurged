@@ -27,4 +27,8 @@ class Permission < ActiveRecord::Base
   def member?
     level == 'member'
   end
+
+  def self.check(a, b)
+    (a & b).present?
+  end
 end

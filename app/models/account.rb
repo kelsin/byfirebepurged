@@ -1,5 +1,5 @@
 class Account < ActiveRecord::Base
-  has_many :characters
+  has_many :characters, :inverse_of => :account
   has_many :signups, :through => :characters
   has_many :raids, :through => :signups
   has_many :created_raids, :class_name => 'Raid', :inverse_of => :account
@@ -27,11 +27,11 @@ class Account < ActiveRecord::Base
   end
 
   def admin?(raid)
-    (permissions & raid.admins.map(&:key)).present?
+    Permission.check(permissions, raid.admins)
   end
 
   def available?(raid)
-    (permissions & raid.permissions.map(&:key)).present?
+    Permission.check(permissions, raid.permissions)
   end
 
   def creator?(raid)

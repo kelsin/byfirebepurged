@@ -33,10 +33,10 @@ class Raid < ActiveRecord::Base
   end
 
   def admins
-    permissions.find_all(&:admin?)
+    permissions.find_all(&:admin?).map(&:key)
   end
 
   def members
-    permissions.find_all(&:member?)
+    permissions.find_all(&:member?).map(&:key)
   end
 end
