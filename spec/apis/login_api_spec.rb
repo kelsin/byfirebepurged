@@ -3,31 +3,31 @@ require 'rails_helper'
 RSpec.describe "Login Api", :type => :api do
   describe('/login') do
     it('should error if a redirect url is not given') do
-      post('/login')
+      get('/login')
 
       expect(last_response).to_not be_ok
     end
 
     it('should error if a bad redirect url is given') do
-      post('/login',
-           { :redirect => 'bad url' }.to_json,
-           'CONTENT_TYPE' => 'application/json')
+      get('/login',
+          { :redirect => 'bad url' },
+          'CONTENT_TYPE' => 'application/json')
 
       expect(last_response).to_not be_ok
     end
 
     it('should error if a non-http/s redirect url is given') do
-      post('/login',
-           { :redirect => 'smtp://localhost' }.to_json,
-           'CONTENT_TYPE' => 'application/json')
+      get('/login',
+          { :redirect => 'smtp://localhost' },
+          'CONTENT_TYPE' => 'application/json')
 
       expect(last_response).to_not be_ok
     end
 
     it('should succeed if a http redirect url is given') do
-      post('/login',
-           { :redirect => 'http://localhost/?code=' }.to_json,
-           'CONTENT_TYPE' => 'application/json')
+      get('/login',
+          { :redirect => 'http://localhost/?code=' },
+          'CONTENT_TYPE' => 'application/json')
 
       expect(last_response).to be_ok
       expect(Login.count).to equal(1)
@@ -38,9 +38,9 @@ RSpec.describe "Login Api", :type => :api do
     end
 
     it('should succeed if a https redirect url is given') do
-      post('/login',
-           { :redirect => 'https://localhost/?code=' }.to_json,
-           'CONTENT_TYPE' => 'application/json')
+      get('/login',
+          { :redirect => 'https://localhost/?code=' },
+          'CONTENT_TYPE' => 'application/json')
 
       expect(last_response).to be_ok
       expect(Login.count).to equal(1)
