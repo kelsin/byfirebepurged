@@ -17,6 +17,9 @@ gem 'httparty'
 # Newrelic monitoring
 gem 'newrelic_rpm'
 
+# Cors support
+gem 'rack-cors', :require => 'rack/cors'
+
 # Can Can for Authorization
 gem 'cancan'
 
