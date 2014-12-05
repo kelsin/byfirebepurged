@@ -4,18 +4,20 @@ Rails.application.routes.draw do
     resources :permissions
   end
 
-  # Raids
-  resources :raids, :concerns => :permissioned do
-    resources :signups
+  scope :defaults => { :format => 'json' } do
+    # Raids
+    resources :raids, :concerns => :permissioned do
+      resources :signups
+    end
+
+    # Account
+    resource :account
+
+    # Sessions
+    get '/login', to: 'sessions#new', :as => :login
+    get '/logout', to: 'sessions#destroy', :as => :logout
+    get '/auth/:provider/callback', :to => 'sessions#create'
+    get '/auth/bnet', :as => :bnet
+    root 'sessions#index'
   end
-
-  # Account
-  resource :account
-
-  # Sessions
-  get '/login', to: 'sessions#new', :as => :login, :defaults => { :format => :json }
-  get '/logout', to: 'sessions#destroy', :as => :logout, :defaults => { :format => :json }
-  get '/auth/:provider/callback', :to => 'sessions#create', :defaults => { :format => :json }
-  get '/auth/bnet', :as => :bnet, :defaults => { :format => :json }
-  root 'sessions#index', :defaults => { :format => :json }
 end
