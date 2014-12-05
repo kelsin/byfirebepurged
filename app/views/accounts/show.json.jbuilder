@@ -12,3 +12,5 @@ end
 json.guilds @account.guilds do |guild|
   json.partial! 'guilds/guild', :guild => guild
 end
+
+json.permissions @account.permissions

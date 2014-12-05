@@ -3,3 +3,4 @@ json.extract! character,
               :level, :item_level, :image_url
 json.account character.account_id
 json.guild character.guild_id
+json.permissions character.permissions
