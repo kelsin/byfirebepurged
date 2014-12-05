@@ -32,6 +32,10 @@ class Raid < ActiveRecord::Base
     characters.map(&:guild).uniq.sort
   end
 
+  def permissionKeys
+    permissions.map(&:key)
+  end
+
   def admins
     permissions.find_all(&:admin?).map(&:key)
   end

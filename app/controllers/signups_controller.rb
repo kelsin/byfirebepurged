@@ -7,10 +7,8 @@ class SignupsController < ApplicationController
 
   def create
     @character = Character.find(signup_params[:character_id])
+    @signup = Signup.new(signup_params.merge(:raid => @raid))
 
-    @signup = Signup.find_or_create_by(signup_params.merge(:raid => @raid))
-
-    # If you can read the raid, then you can signup for it
     authorize! :create, @signup
 
     raise Exceptions::ByFireBePurgedError, 'Error signing up for raid' unless @signup.save

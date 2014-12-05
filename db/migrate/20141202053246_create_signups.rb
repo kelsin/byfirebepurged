@@ -11,6 +11,6 @@ class CreateSignups < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_index 'signups', ['raid_id', 'character_id'], :name => 'index_signups_on_character_id_and_raid_id'
+    add_index 'signups', ['raid_id', 'character_id'], :unique => true, :name => 'index_signups_on_character_id_and_raid_id'
   end
 end

@@ -104,7 +104,7 @@ ActiveRecord::Schema.define(version: 20141203171515) do
   end
 
   add_index "signups", ["character_id"], name: "index_signups_on_character_id"
-  add_index "signups", ["raid_id", "character_id"], name: "index_signups_on_character_id_and_raid_id"
+  add_index "signups", ["raid_id", "character_id"], name: "index_signups_on_character_id_and_raid_id", unique: true
   add_index "signups", ["raid_id"], name: "index_signups_on_raid_id"
 
 end
