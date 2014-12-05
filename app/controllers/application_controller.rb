@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
-  rescue_from ::Exceptions::AuthenticationError, :with => :unauthorized
   rescue_from ::Exceptions::ByFireBePurgedError, :with => :error
+  rescue_from ::Exceptions::AuthenticationError, :with => :unauthorized
   rescue_from ::CanCan::AccessDenied, :with => :error
   rescue_from ::ActiveRecord::RecordNotFound, :with => :not_found
 
