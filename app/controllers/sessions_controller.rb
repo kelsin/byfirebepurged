@@ -1,7 +1,7 @@
 require 'bnet'
 
 class SessionsController < ApplicationController
-  skip_before_action :authenticate
+  skip_before_action :authenticate, :except => :destroy
   skip_authorization_check
 
   @@bnet = Bnet.new
@@ -85,6 +85,12 @@ class SessionsController < ApplicationController
     update_characters if latestCharacter.nil? or latestCharacter.updated_at < 1.hour.ago
 
     redirect_to "#{@login.redirect}#{@session.key}"
+  end
+
+  def destroy
+    @session.try(:destroy)
+
+    render :json => { :logged_out => true }
   end
 
   private

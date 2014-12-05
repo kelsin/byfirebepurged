@@ -21,13 +21,13 @@ class ApplicationController < ActionController::Base
 
   def authenticate
     authorization = request.headers['Authorization']
-    m = /apikey ([\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12})/.match(authorization)
-    key = m[1]
+    raise ::Exceptions::AuthenticationError, "Must provide Authorization header" unless authorization
 
-    raise ::Exceptions::AuthenticationError, "Unable to parse apikey: #{authorization}" unless key
+    key = /apikey ([\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12})/.match(authorization).try(:[], 1)
+    raise ::Exceptions::AuthenticationError, "Unable to parse apikey" unless key
 
     @session = Session.includes(:account).find_by_key(key)
-    raise ::Exceptions::AuthenticationError, "Invalid apikey: #{key}" unless @session
+    raise ::Exceptions::AuthenticationError, "Invalid apikey" unless @session
 
     @account = @session.account
     @characters = @account.characters

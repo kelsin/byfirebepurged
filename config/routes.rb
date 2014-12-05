@@ -13,7 +13,8 @@ Rails.application.routes.draw do
   resource :account
 
   # Sessions
-  post '/login', to: 'sessions#new', :as => :login, :defaults => { :format => :json }
+  get '/login', to: 'sessions#new', :as => :login, :defaults => { :format => :json }
+  get '/logout', to: 'sessions#destroy', :as => :logout, :defaults => { :format => :json }
   get '/auth/:provider/callback', :to => 'sessions#create', :defaults => { :format => :json }
   get '/auth/bnet', :as => :bnet, :defaults => { :format => :json }
   root 'sessions#index', :defaults => { :format => :json }
