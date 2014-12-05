@@ -1,5 +1,6 @@
 class RaidsController < ApplicationController
   def index
+    authorize! :read, Raid
     @raids = @account.available_raids
 
     @raids.each do |raid|
