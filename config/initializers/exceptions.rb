@@ -18,4 +18,10 @@ module Exceptions
   #       "error": "Must provide a redirect value"
   #   }
   class ByFireBePurgedError < StandardError; end
+
+  # == Authentication Error
+  #
+  # This is the error thrown when we can't parse the api key, or when it's
+  # invalid.
+  class AuthenticationError < ByFireBePurgedError; end
 end

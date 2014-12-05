@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  rescue_from ::Exceptions::AuthenticationError, :with => :unauthorized
   rescue_from ::Exceptions::ByFireBePurgedError, :with => :error
   rescue_from ::CanCan::AccessDenied, :with => :error
   rescue_from ::ActiveRecord::RecordNotFound, :with => :not_found
@@ -23,10 +24,10 @@ class ApplicationController < ActionController::Base
     m = /apikey ([\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12})/.match(authorization)
     key = m[1]
 
-    raise Exceptions::ByFireBePurgedError, "Unable to parse apikey: #{authorization}" unless key
+    raise ::Exceptions::AuthenticationError, "Unable to parse apikey: #{authorization}" unless key
 
     @session = Session.includes(:account).find_by_key(key)
-    raise Exceptions::ByFireBePurgedError, "Invalid apikey: #{key}" unless @session
+    raise ::Exceptions::AuthenticationError, "Invalid apikey: #{key}" unless @session
 
     @account = @session.account
     @characters = @account.characters
