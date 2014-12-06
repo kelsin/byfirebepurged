@@ -1,7 +1,7 @@
 json.ignore_nil! true
 
 json.account do
-  json.extract! @account, :id, :account_id, :battletag
+  json.partial! 'accounts/account', :account => @account
   json.characters @account.character_ids
 end
 

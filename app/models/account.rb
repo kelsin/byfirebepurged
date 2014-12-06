@@ -43,7 +43,7 @@ class Account < ActiveRecord::Base
   end
 
   def available_raids
-    @available_raids ||= Raid.includes(:signups => { :character => :guild }).where(:permissions => { :key => permissions })
+    @available_raids ||= Raid.includes(:account, :signups => { :character => :guild }).where(:permissions => { :key => permissions })
   end
 
   def permissions
