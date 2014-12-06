@@ -7,8 +7,16 @@ class Raid < ActiveRecord::Base
   validates :name, :presence => true
   validates :date, :presence => true
   validates :account, :presence => true
-  validates :requiredLevel, :numericality => { :only_integer => true, :greater_than => 0 }
-  validates :requiredItemLevel, :numericality => { :only_integer => true, :greater_than => 0 }
+  validates :requiredLevel, :numericality => {
+              :only_integer => true,
+              :greater_than => 0,
+              :allow_nil => true
+            }
+  validates :requiredItemLevel, :numericality => {
+              :only_integer => true,
+              :greater_than => 0,
+              :allow_nil => true
+            }
 
   # By default only deal with raids that are in the future, or under 6 hours
   # past start time.
