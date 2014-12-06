@@ -7,6 +7,7 @@ class CreateSignups < ActiveRecord::Migration
       t.string :note
       t.boolean :preferred, :default => false, :null => false
       t.boolean :seated, :default => false, :null => false
+      t.string :role, :null => false
 
       t.timestamps
     end

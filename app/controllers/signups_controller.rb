@@ -38,7 +38,7 @@ class SignupsController < ApplicationController
   private
 
   def signup_params
-    params.require(:signup).permit(:character_id, :note, :preferred, :seated)
+    params.require(:signup).permit(:character_id, :note, :preferred, :seated, :role)
   end
 
   def load_raid

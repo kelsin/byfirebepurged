@@ -99,6 +99,7 @@ ActiveRecord::Schema.define(version: 20141203171515) do
     t.string   "note"
     t.boolean  "preferred",    default: false, null: false
     t.boolean  "seated",       default: false, null: false
+    t.string   "role",         default: "dps", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
