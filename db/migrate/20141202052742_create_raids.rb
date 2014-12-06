@@ -14,6 +14,9 @@ class CreateRaids < ActiveRecord::Migration
       t.integer :tanks, :default => 2, :null => false
       t.integer :healers, :default => 6, :null => false
 
+      t.integer :requiredLevel
+      t.integer :requiredItemLevel
+
       t.timestamps
     end
   end
