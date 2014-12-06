@@ -25,6 +25,7 @@ class RaidsController < ApplicationController
     @raid = Raid.find(params[:id])
     authorize! :update, @raid
     raise Exceptions::ByFireBePurgedError, 'Error saving raid' unless @raid.update(raid_params)
+    render :show
   end
 
   def create
@@ -35,6 +36,7 @@ class RaidsController < ApplicationController
     @raid.permissions << Permission.new(:key => @account.to_permission, :level => 'admin')
 
     raise Exceptions::ByFireBePurgedError, 'Error saving raid' unless @raid.save
+    render :show
   end
 
   private
