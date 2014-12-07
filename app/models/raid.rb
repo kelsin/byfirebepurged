@@ -39,7 +39,7 @@ class Raid < ActiveRecord::Base
   end
 
   def guilds
-    characters.map(&:guild).uniq.sort
+    characters.map(&:guild).uniq.compact.sort
   end
 
   def permissionKeys
