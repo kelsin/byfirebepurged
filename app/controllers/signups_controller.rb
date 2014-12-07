@@ -16,10 +16,10 @@ class SignupsController < ApplicationController
       if @signup.save
         render :show
       else
-        raise Exceptions::ByFireBePurgedError.new(@signup.errors), 'Error signing up for raid'
+        raise Exceptions::ByFireBePurgedError.new(@signup.errors.messages), 'Error signing up for raid'
       end
     rescue ActiveRecord::RecordNotUnique
-      raise Exceptions::ByFireBePurgedError.new(@signup.errors), 'Already signed up for this raid'
+      raise Exceptions::ByFireBePurgedError.new(@signup.errors.messages), 'Already signed up for this raid'
     end
   end
 
@@ -31,7 +31,7 @@ class SignupsController < ApplicationController
     if @signup.update(signup_params)
       render :show
     else
-      raise Exceptions::ByFireBePurgedError.new(@signup.errors), 'Error saving signup'
+      raise Exceptions::ByFireBePurgedError.new(@signup.errors.messages), 'Error saving signup'
     end
   end
 
