@@ -20,5 +20,8 @@ test:
   <<: *default
   database: db/test.sqlite3
 
+staging:
+  url: <%= ENV['DATABASE_URL'] %>
+
 production:
   url: <%= ENV['DATABASE_URL'] %>
