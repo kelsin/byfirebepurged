@@ -7,7 +7,7 @@ class RaidsController < ApplicationController
       authorize! :read, raid
     end
 
-    @all_accounts = @raids.map(&:account)
+    @all_accounts = @raids.map(&:account).uniq.sort
     @all_signups = @raids.inject([]) do |signups, raid|
       signups + raid.signups
     end
