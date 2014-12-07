@@ -7,27 +7,43 @@ class SignupsController < ApplicationController
 
   def create
     @character = Character.find(signup_params[:character_id])
-    @signup = Signup.new(signup_params.merge(:raid => @raid))
+    @signup = Signup.new(signup_params)
+    @signup.raid = @raid
 
     authorize! :create, @signup
 
-    raise Exceptions::ByFireBePurgedError, 'Error signing up for raid' unless @signup.save
-    render :show
+    begin
+      if @signup.save
+        render :show
+      else
+        raise Exceptions::ByFireBePurgedError.new(@signup.errors), 'Error signing up for raid'
+      end
+    rescue ActiveRecord::RecordNotUnique
+      raise Exceptions::ByFireBePurgedError.new(@signup.errors), 'Already signed up for this raid'
+    end
   end
 
   def update
     @signup = @raid.signups.find(params[:id])
+
     authorize! :update, @signup
-    raise Exceptions::ByFireBePurgedError, 'Error saving signup' unless @signup.update(signup_params)
-    render :show
+
+    if @signup.update(signup_params)
+      render :show
+    else
+      raise Exceptions::ByFireBePurgedError.new(@signup.errors), 'Error saving signup'
+    end
   end
 
   def destroy
     @signup = @raid.signups.find(params[:id])
     authorize! :destroy, @signup
 
-    raise Exceptions::ByFireBePurgedError, 'Error deleting signup' unless @signup.destroy
-    render :show
+    if @signup.destroy
+      render :show
+    else
+      raise Exceptions::ByFireBePurgedError, 'Error deleting signup'
+    end
   end
 
   def show
@@ -38,10 +54,16 @@ class SignupsController < ApplicationController
   private
 
   def signup_params
-    params.require(:signup).permit(:character_id, :note, :preferred, :seated, :role)
+    params.require(:signup).permit(:character_id, :raid_id, :note, :preferred, :seated, :role)
   end
 
   def load_raid
-    @raid = Raid.find(params[:raid_id])
+    if params[:raid_id]
+      @raid = Raid.find(params[:raid_id])
+    else signup_params[:raid_id]
+      @raid = Raid.find(signup_params[:raid_id])
+    end
+
+    authorize! :read, @raid
   end
 end

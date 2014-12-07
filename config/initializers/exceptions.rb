@@ -17,7 +17,13 @@ module Exceptions
   #   {
   #       "error": "Must provide a redirect value"
   #   }
-  class ByFireBePurgedError < StandardError; end
+  class ByFireBePurgedError < StandardError
+    attr_reader :errors
+
+    def initialize(errors)
+      @errors = errors
+    end
+  end
 
   # == Authentication Error
   #

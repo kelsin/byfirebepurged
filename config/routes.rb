@@ -1,14 +1,16 @@
 Rails.application.routes.draw do
-  # Permissions
-  concern :permissioned do
-    resources :permissions
-  end
-
   scope :defaults => { :format => 'json' } do
     # Raids
-    resources :raids, :concerns => :permissioned do
+    resources :raids do
       resources :signups
+      resources :permissions
     end
+
+    # Signups
+    resources :signups
+
+    # Permissions
+    resources :permissions
 
     # Account
     resource :account
