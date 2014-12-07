@@ -12,7 +12,7 @@ class RaidsController < ApplicationController
       signups + raid.signups
     end
     @all_characters = @all_signups.map(&:character).uniq.sort
-    @all_guilds = @all_characters.map(&:guild).uniq.sort
+    @all_guilds = @all_characters.map(&:guild).uniq.compact.sort
   end
 
   def show
