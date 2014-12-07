@@ -1,5 +1,5 @@
 class SignupsController < ApplicationController
-  before_action :load_raid
+  before_action :load_raid, :except => :destroy
 
   def index
     authorize! :read, @raid
@@ -36,7 +36,8 @@ class SignupsController < ApplicationController
   end
 
   def destroy
-    @signup = @raid.signups.find(params[:id])
+    @signup = Signup.find(params[:id])
+    authorize! :read, @signup.raid
     authorize! :destroy, @signup
 
     if @signup.destroy
@@ -60,10 +61,10 @@ class SignupsController < ApplicationController
   def load_raid
     if params[:raid_id]
       @raid = Raid.find(params[:raid_id])
-    else signup_params[:raid_id]
+    elsif signup_params[:raid_id]
       @raid = Raid.find(signup_params[:raid_id])
     end
 
-    authorize! :read, @raid
+    authorize! :read, @raid if @raid
   end
 end
