@@ -14,3 +14,4 @@ after_success:
   - eval "$(ssh-agent)"
   - ssh-add config/deploy_id_rsa
   - "[[ $TRAVIS_BRANCH = 'master' ]] && bundle exec cap production deploy"
+  - "[[ $TRAVIS_BRANCH = 'develop' ]] && bundle exec cap staging deploy"
