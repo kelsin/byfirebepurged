@@ -37,7 +37,7 @@ class Account < ActiveRecord::Base
   end
 
   def available?(raid)
-    Permission.check(permissions, raid.permissions)
+    Permission.check(permissions, raid.permissionKeys)
   end
 
   def creator?(raid)
