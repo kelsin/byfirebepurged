@@ -56,6 +56,7 @@ class SignupsController < ApplicationController
 
   def mappings
     { :character => :character_id,
+      :role => :role_id,
       :raid => :raid_id,
       :roles => :role_ids }
   end
@@ -63,6 +64,7 @@ class SignupsController < ApplicationController
   def allowed_params
     params.require(:signup).permit(:character, :character_id,
                                    :raid, :raid_id,
+                                   :role, :role_id,
                                    { :roles => [] }, { :role_ids => [] },
                                    :note, :preferred, :seated)
   end

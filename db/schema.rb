@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141207192435) do
+ActiveRecord::Schema.define(version: 20141208064052) do
 
   create_table "accounts", force: true do |t|
     t.string   "battletag"
@@ -127,6 +127,7 @@ ActiveRecord::Schema.define(version: 20141207192435) do
     t.boolean  "seated",       default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "role_id"
   end
 
   add_index "signups", ["character_id"], name: "index_signups_on_character_id"
