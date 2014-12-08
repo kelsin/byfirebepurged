@@ -6,8 +6,8 @@ class SignupsController < ApplicationController
   end
 
   def create
-    @character = Character.find(signup_params[:character_id])
-    @signup = Signup.new(signup_params)
+    @character = Character.find(converted_params[:character_id])
+    @signup = Signup.new(converted_params)
     @signup.raid = @raid
 
     authorize! :create, @signup
@@ -28,7 +28,7 @@ class SignupsController < ApplicationController
 
     authorize! :update, @signup
 
-    if @signup.update(signup_params)
+    if @signup.update(converted_params)
       render :show
     else
       raise Exceptions::ByFireBePurgedError.new(@signup.errors.messages), 'Error saving signup'
@@ -54,19 +54,22 @@ class SignupsController < ApplicationController
 
   private
 
-  def signup_params
-    params.require(:signup).permit(:character_id, :raid_id,
-                                   :note, :preferred, :seated,
-                                   { :role_ids => [] })
+  def mappings
+    { :character => :character_id,
+      :raid => :raid_id,
+      :roles => :role_ids }
+  end
+
+  def allowed_params
+    params.require(:signup).permit(:character, :character_id,
+                                   :raid, :raid_id,
+                                   { :roles => [] }, { :role_ids => [] },
+                                   :note, :preferred, :seated)
   end
 
   def load_raid
-    if params[:raid_id]
-      @raid = Raid.find(params[:raid_id])
-    elsif signup_params[:raid_id]
-      @raid = Raid.find(signup_params[:raid_id])
-    end
-
+    raid_id = params[:raid_id] || converted_params[:raid_id]
+    @raid = Raid.find(raid_id) if raid_id
     authorize! :read, @raid if @raid
   end
 end
