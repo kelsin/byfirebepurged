@@ -5,6 +5,9 @@ class Character < ActiveRecord::Base
   has_many :signups, :inverse_of => :character
   has_many :raids, :through => :signups
 
+  has_many :class_roles, :primary_key => 'class_id', :foreign_key => 'class_id'
+  has_many :roles, :through => :class_roles
+
   default_scope { includes(:guild) }
 
   def permissions

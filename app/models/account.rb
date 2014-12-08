@@ -12,6 +12,12 @@ class Account < ActiveRecord::Base
     characters.map(&:guild).compact.uniq.sort
   end
 
+  def roles
+    characters.inject([]) do |roles, character|
+      roles + character.roles
+    end.uniq.sort
+  end
+
   def signup_for(raid)
     raid.signups.find do |signup|
       signup.raid_id == raid.id

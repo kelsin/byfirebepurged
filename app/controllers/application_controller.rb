@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate
   check_authorization
 
-  helper_method :current_account
+  helper_method :current_account, :roles
 
   private
 
@@ -35,6 +35,24 @@ class ApplicationController < ActionController::Base
     @signups = @account.signups
   end
 
+  def roles
+    @roles ||= Role.includes(:class_roles).all
+  end
+
+  def mappings
+    {}
+  end
+
+  def converted_params
+    allowed_params.map do |k, v|
+      [mappings[k.to_sym] || k.to_sym, v]
+    end.to_h
+  end
+
+  def allowed_params
+    params
+  end
+
   def unauthorized(e)
     render :json => {:error => e.message}, :status => :unauthorized
   end
@@ -44,6 +62,9 @@ class ApplicationController < ActionController::Base
   end
 
   def error(e)
-    render :json => {:error => e.message}, :status => :bad_request
+    render :json => {
+             :error => e.message,
+             :messages => e.errors
+           }, :status => :bad_request
   end
 end

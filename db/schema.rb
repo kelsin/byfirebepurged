@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141203171515) do
+ActiveRecord::Schema.define(version: 20141208064052) do
 
   create_table "accounts", force: true do |t|
     t.string   "battletag"
@@ -39,6 +39,14 @@ ActiveRecord::Schema.define(version: 20141203171515) do
   add_index "characters", ["account_id"], name: "index_characters_on_account_id"
   add_index "characters", ["guild_id"], name: "index_characters_on_guild_id"
   add_index "characters", ["name", "realm"], name: "index_characters_on_name_and_realm"
+
+  create_table "class_roles", force: true do |t|
+    t.integer "role_id"
+    t.integer "class_id"
+  end
+
+  add_index "class_roles", ["class_id"], name: "index_class_roles_on_class_id"
+  add_index "class_roles", ["role_id"], name: "index_class_roles_on_role_id"
 
   create_table "guilds", force: true do |t|
     t.string   "name"
@@ -68,20 +76,38 @@ ActiveRecord::Schema.define(version: 20141203171515) do
   end
 
   create_table "raids", force: true do |t|
-    t.string   "name",                       null: false
-    t.datetime "date",                       null: false
+    t.string   "name",                              null: false
+    t.datetime "date",                              null: false
     t.text     "note"
-    t.boolean  "finalized",  default: false, null: false
-    t.integer  "account_id",                 null: false
-    t.integer  "groups",     default: 1,     null: false
-    t.integer  "size",       default: 30,    null: false
-    t.integer  "tanks",      default: 2,     null: false
-    t.integer  "healers",    default: 6,     null: false
+    t.boolean  "finalized",         default: false, null: false
+    t.integer  "account_id",                        null: false
+    t.integer  "groups",            default: 1,     null: false
+    t.integer  "size",              default: 30,    null: false
+    t.integer  "tanks",             default: 2,     null: false
+    t.integer  "healers",           default: 6,     null: false
+    t.integer  "requiredLevel"
+    t.integer  "requiredItemLevel"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "raids", ["account_id"], name: "index_raids_on_account_id"
+
+  create_table "roles", force: true do |t|
+    t.string   "name"
+    t.string   "slug"
+    t.string   "icon"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "roles_signups", id: false, force: true do |t|
+    t.integer "role_id"
+    t.integer "signup_id"
+  end
+
+  add_index "roles_signups", ["role_id"], name: "index_roles_signups_on_role_id"
+  add_index "roles_signups", ["signup_id"], name: "index_roles_signups_on_signup_id"
 
   create_table "sessions", force: true do |t|
     t.integer  "account_id",   null: false
@@ -99,9 +125,9 @@ ActiveRecord::Schema.define(version: 20141203171515) do
     t.string   "note"
     t.boolean  "preferred",    default: false, null: false
     t.boolean  "seated",       default: false, null: false
-    t.string   "role",         default: "dps", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "role_id"
   end
 
   add_index "signups", ["character_id"], name: "index_signups_on_character_id"
