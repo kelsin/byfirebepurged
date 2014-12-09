@@ -9,7 +9,13 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_account, :roles
 
+  before_filter :default_format
+
   private
+
+  def default_format
+    request.format = :ember unless [:ember].include?(request.format.symbol)
+  end
 
   def current_account
     @account
