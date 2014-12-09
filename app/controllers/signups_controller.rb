@@ -62,11 +62,20 @@ class SignupsController < ApplicationController
   end
 
   def allowed_params
-    params.require(:signup).permit(:character, :character_id,
-                                   :raid, :raid_id,
-                                   :role, :role_id,
-                                   { :roles => [] }, { :role_ids => [] },
-                                   :note, :preferred, :seated)
+    if @raid
+      if @account.admin?(@raid)
+        params.require(:signup).permit(:character, :character_id,
+                                       :role, :role_id,
+                                       { :roles => [] }, { :role_ids => [] },
+                                       :note, :preferred, :seated)
+      else
+        params.require(:signup).permit(:character, :character_id,
+                                       { :roles => [] }, { :role_ids => [] },
+                                       :note, :preferred)
+      end
+    else
+      params.require(:signup).permit(:raid, :raid_id)
+    end
   end
 
   def load_raid
