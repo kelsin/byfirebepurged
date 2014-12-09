@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   private
 
   def default_format
-    request.format = :ember unless [:ember].include?(request.format.symbol)
+    request.format = :json unless [:json, :ember].include?(request.format.symbol)
   end
 
   def current_account
