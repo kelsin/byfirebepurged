@@ -6,15 +6,22 @@ RSpec.describe "Raids Api", :type => :api do
   end
 
   describe 'while logged out' do
-    it '/raids should return a 401' do
+    it 'GET /raids should return a 401' do
       get '/raids'
 
       expect(last_response).to_not be_ok
       expect(last_response.status).to equal(401)
     end
 
-    it '/raids/{id} should return a 401' do
+    it 'GET /raids/{id} should return a 401' do
       get '/raids/1'
+
+      expect(last_response).to_not be_ok
+      expect(last_response.status).to equal(401)
+    end
+
+    it 'PUT /raids/{id} should return a 401' do
+      put '/raids/1', { :raid => { :name => 'New Raid Name' } }
 
       expect(last_response).to_not be_ok
       expect(last_response.status).to equal(401)
@@ -44,6 +51,13 @@ RSpec.describe "Raids Api", :type => :api do
         expect(last_response).to_not be_ok
         expect(last_response.status).to equal(401)
       end
+
+      it 'PUT /raids/{id} should return a 404' do
+        put '/raids/1', { :raid => { :name => 'New Raid Name' } }
+
+        expect(last_response).to_not be_ok
+        expect(last_response.status).to equal(404)
+      end
     end
 
     describe 'with a no-permission raid' do
@@ -64,6 +78,13 @@ RSpec.describe "Raids Api", :type => :api do
 
       it "/raids/{id} should return a 401" do
         get "/raids/#{@raid.id}"
+
+        expect(last_response).to_not be_ok
+        expect(last_response.status).to equal(401)
+      end
+
+      it 'PUT /raids/{id} should return a 401' do
+        put "/raids/#{@raid.id}", { :raid => { :name => 'New Raid Name' } }
 
         expect(last_response).to_not be_ok
         expect(last_response.status).to equal(401)
@@ -90,6 +111,13 @@ RSpec.describe "Raids Api", :type => :api do
 
       it "/raids/{id} should return a 401" do
         get "/raids/#{@raid.id}"
+
+        expect(last_response).to_not be_ok
+        expect(last_response.status).to equal(401)
+      end
+
+      it 'PUT /raids/{id} should return a 401' do
+        put "/raids/#{@raid.id}", { :raid => { :name => 'New Raid Name' } }
 
         expect(last_response).to_not be_ok
         expect(last_response.status).to equal(401)
@@ -124,6 +152,13 @@ RSpec.describe "Raids Api", :type => :api do
         expect(last_response.body).to have_json_size(0).at_path("guilds")
         expect(last_response.body).to have_json_size(0).at_path("roles")
       end
+
+      it 'PUT /raids/{id} should return a 401' do
+        put '/raids/1', { :raid => { :name => 'New Raid Name' } }
+
+        expect(last_response).to_not be_ok
+        expect(last_response.status).to equal(401)
+      end
     end
 
     describe 'with a admin-permission raid' do
@@ -153,6 +188,15 @@ RSpec.describe "Raids Api", :type => :api do
         expect(last_response.body).to have_json_size(0).at_path("characters")
         expect(last_response.body).to have_json_size(0).at_path("guilds")
         expect(last_response.body).to have_json_size(0).at_path("roles")
+      end
+
+      it 'PUT /raids/{id} should edit the raid' do
+        put "/raids/#{@raid.id}", { :raid => { :name => 'New Raid Name' } }
+
+        expect(last_response).to be_ok
+
+        @raid.reload
+        expect(@raid.name).to eql('New Raid Name')
       end
     end
 
@@ -194,6 +238,13 @@ RSpec.describe "Raids Api", :type => :api do
           expect(last_response.body).to have_json_size(0).at_path("guilds")
           expect(last_response.body).to have_json_size(0).at_path("roles")
         end
+
+        it 'PUT /raids/{id} should return a 401' do
+          put "/raids/#{@raid.id}", { :raid => { :name => 'New Raid Name' } }
+
+          expect(last_response).to_not be_ok
+          expect(last_response.status).to equal(401)
+        end
       end
 
       describe 'with a character-permission raid' do
@@ -223,6 +274,13 @@ RSpec.describe "Raids Api", :type => :api do
           expect(last_response.body).to have_json_size(0).at_path("characters")
           expect(last_response.body).to have_json_size(0).at_path("guilds")
           expect(last_response.body).to have_json_size(0).at_path("roles")
+        end
+
+        it 'PUT /raids/{id} should return a 401' do
+          put "/raids/#{@raid.id}", { :raid => { :name => 'New Raid Name' } }
+
+          expect(last_response).to_not be_ok
+          expect(last_response.status).to equal(401)
         end
       end
     end
