@@ -81,8 +81,7 @@ class SessionsController < ApplicationController
     end
 
     # Update characters if it's been an hour since last login
-    latestCharacter = @account.characters.max_by(&:updated_at)
-    update_characters if latestCharacter.nil? or latestCharacter.updated_at < 1.hour.ago
+    update_characters
 
     redirect_to "#{@login.redirect}#{@session.key}"
   end
@@ -107,8 +106,6 @@ class SessionsController < ApplicationController
 
   # Update the accounts characters from the Battle.net api
   def update_characters
-    seen = Set.new
-
     @@bnet.characters(@session.access_token).each do |character|
       guild = nil
       if character['guild'].present? and character['guildRealm'].present?
@@ -116,18 +113,17 @@ class SessionsController < ApplicationController
                                         :realm => character['guildRealm'])
       end
 
-      Character.find_or_initialize_by(:account_id => @session.account_id,
-                                      :name => character['name'],
-                                      :realm => character['realm'])
-        .update(:guild_id => guild.try(:id),
-                :image_url => image_url(character),
-                :level => character['level'],
-                :race_id => character['race'],
-                :class_id => character['class'],
-                :gender_id => character['gender'])
+      c = Character.find_or_initialize_by(:account_id => @session.account_id,
+                                          :name => character['name'],
+                                          :realm => character['realm'])
+      c.update(:guild_id => guild.try(:id),
+               :image_url => image_url(character),
+               :level => character['level'],
+               :race_id => character['race'],
+               :class_id => character['class'],
+               :gender_id => character['gender'])
 
-      seen.add(:name => character['name'],
-               :realm => character['realm'])
+      c.update(:item_level => @@bnet.ilvl(c.name, c.realm)) if c.level >= 100
     end
   end
 
