@@ -1,5 +1,7 @@
 json.api do
   json.login login_url
+  json.account account_url
+  json.raids raids_url
 end
 
 json.env Rails.env
