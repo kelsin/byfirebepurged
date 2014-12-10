@@ -123,14 +123,7 @@ class SessionsController < ApplicationController
                :class_id => character['class'],
                :gender_id => character['gender'])
 
-      puts c.level
-      puts c.updated_at
-      puts 1.hour.ago
-      if c.level >= 100
-        armory = @@bnet.character(c.name, c.realm)
-        puts armory['items']['averageItemLevel']
-        c.update(:item_level => armory['items']['averageItemLevel'])
-      end
+      c.update(:item_level => @@bnet.ilvl(c.name, c.realm)) if c.level >= 100
     end
   end
 
