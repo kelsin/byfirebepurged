@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe "Login Api", :type => :api do
+  before do
+    header 'Accept', 'application/json+ember'
+  end
+
   describe('/login') do
     it('should error if a redirect url is not given') do
       get('/login')
