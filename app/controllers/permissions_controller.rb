@@ -1,5 +1,5 @@
 class PermissionsController < ApplicationController
-  before_action :load_permissioned
+  before_action :load_permissioned, :except => :destroy
 
   def index
     @permissions = @permissioned.permissions
@@ -8,6 +8,13 @@ class PermissionsController < ApplicationController
   def create
     @permission = Permission.new(permission_params)
     @permissioned.permissions << @permission
+  end
+
+  def destroy
+    @permission = Permission.find(params[:id])
+    authorize! :manage, @permission.permissioned
+    @permission.destroy
+    render :create
   end
 
   private
@@ -19,7 +26,7 @@ class PermissionsController < ApplicationController
   def load_permissioned
     if params[:raid_id]
       @permissioned = Raid.unscoped.with_permissions.find(params[:raid_id])
-    elsif permission_params[:permissioned_type] == 'raid' and permission_params[:permissioned_id]
+    elsif permission_params[:permissioned_type] == 'Raid' and permission_params[:permissioned_id]
       @permissioned = Raid.unscoped.with_permissions.find(permission_params[:permissioned_id])
     end
 
