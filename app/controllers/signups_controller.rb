@@ -25,8 +25,13 @@ class SignupsController < ApplicationController
 
   def update
     @signup = Signup.find(params[:id])
-    authorize! :read, @signup.raid
     authorize! :update, @signup
+
+    if can? :manage, @signup.raid
+      @signup.seated = params[:signup][:seated] if params[:signup].has_key?(:seated)
+      @signup.role_id = params[:signup][:role_id] if params[:signup].has_key?(:role_id)
+      @signup.role = params[:signup][:role] if params[:signup].has_key?(:role)
+    end
 
     if @signup.update(converted_params)
       render :show
@@ -57,7 +62,6 @@ class SignupsController < ApplicationController
 
   def mappings
     { :character => :character_id,
-      :role => :role_id,
       :raid => :raid_id,
       :roles => :role_ids }
   end
@@ -65,8 +69,7 @@ class SignupsController < ApplicationController
   def allowed_params
     params.require(:signup).permit(:character, :character_id,
                                    :raid, :raid_id,
-                                   :role, :role_id,
                                    { :roles => [] }, { :role_ids => [] },
-                                   :note, :preferred, :seated)
+                                   :note, :preferred)
   end
 end

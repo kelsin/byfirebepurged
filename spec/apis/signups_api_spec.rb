@@ -258,26 +258,131 @@ RSpec.describe 'Raids Api', :type => :api do
             expect(last_response.body).to have_json_size(3).at_path('roles')
           end
 
-          it 'PATCH /raids/{id}/signups/{id} should be allowed to change the note' do
+          it 'PATCH /raids/{id}/signups/{id} should be allowed to change the note, preferred, and roles' do
             patch "/raids/#{@raid.id}/signups/#{@signup.id}", {
                     :signup => {
+                      :role_ids => [@dps.id, @healing.id],
+                      :preferred => true,
                       :note => 'New Note' }}
 
             expect(last_response).to be_ok
             expect(last_response.body).to be_json_eql('New Note'.to_json).at_path('signup/note')
+            expect(last_response.body).to be_json_eql(true.to_json).at_path('signup/preferred')
+            expect(last_response.body).to be_json_eql([@dps.id, @healing.id].to_json).at_path('signup/roles')
             expect(last_response.body).to have_json_size(1).at_path('characters')
             expect(last_response.body).to have_json_size(1).at_path('guilds')
             expect(last_response.body).to have_json_size(3).at_path('roles')
           end
 
-          it 'PATCH /signups/{id} should be allowed to change the note' do
+          it 'PATCH /signups/{id} should be allowed to change the note, preferred, and roles' do
             patch "/signups/#{@signup.id}", {
                     :signup => {
                       :raid_id => @raid.id,
+                      :role_ids => [@dps.id, @healing.id],
+                      :preferred => true,
                       :note => 'New Note' }}
 
             expect(last_response).to be_ok
             expect(last_response.body).to be_json_eql('New Note'.to_json).at_path('signup/note')
+            expect(last_response.body).to be_json_eql(true.to_json).at_path('signup/preferred')
+            expect(last_response.body).to be_json_eql([@dps.id, @healing.id].to_json).at_path('signup/roles')
+            expect(last_response.body).to have_json_size(1).at_path('characters')
+            expect(last_response.body).to have_json_size(1).at_path('guilds')
+            expect(last_response.body).to have_json_size(3).at_path('roles')
+          end
+
+          it 'PATCH /raids/{id}/signups/{id} should not be allowed to change seating and role' do
+            patch "/raids/#{@raid.id}/signups/#{@signup.id}", {
+                    :signup => {
+                      :seated => true,
+                      :role_id => @dps.id }}
+
+            expect(last_response).to be_ok
+            expect(last_response.body).to be_json_eql(false.to_json).at_path('signup/seated')
+            expect(last_response.body).to be_json_eql(nil.to_json).at_path('signup/role')
+            expect(last_response.body).to have_json_size(1).at_path('characters')
+            expect(last_response.body).to have_json_size(1).at_path('guilds')
+            expect(last_response.body).to have_json_size(3).at_path('roles')
+          end
+
+          it 'PATCH /signups/{id} should not be allowed to change seating and role' do
+            patch "/signups/#{@signup.id}", {
+                    :signup => {
+                      :seated => true,
+                      :role_id => @dps.id }}
+
+            expect(last_response).to be_ok
+            expect(last_response.body).to be_json_eql(false.to_json).at_path('signup/seated')
+            expect(last_response.body).to be_json_eql(nil.to_json).at_path('signup/role')
+            expect(last_response.body).to have_json_size(1).at_path('characters')
+            expect(last_response.body).to have_json_size(1).at_path('guilds')
+            expect(last_response.body).to have_json_size(3).at_path('roles')
+          end
+
+          it 'DELETE /raids/{id}/signups/{id} should be allowed to remove the signup' do
+            delete "/raids/#{@raid.id}/signups/#{@signup.id}"
+
+            expect(last_response).to be_ok
+            expect(last_response.body).to be_json_eql('Note'.to_json).at_path('signup/note')
+            expect(last_response.body).to have_json_size(1).at_path('characters')
+            expect(last_response.body).to have_json_size(1).at_path('guilds')
+            expect(last_response.body).to have_json_size(3).at_path('roles')
+
+            expect(Signup.where(:id => @signup.id).count).to equal(0)
+          end
+
+          it 'DELETE /signups/{id} should be allowed to remove the signup' do
+            delete "/signups/#{@signup.id}"
+
+            expect(last_response).to be_ok
+            expect(last_response.body).to be_json_eql('Note'.to_json).at_path('signup/note')
+            expect(last_response.body).to have_json_size(1).at_path('characters')
+            expect(last_response.body).to have_json_size(1).at_path('guilds')
+            expect(last_response.body).to have_json_size(3).at_path('roles')
+
+            expect(Signup.where(:id => @signup.id).count).to equal(0)
+          end
+        end
+      end
+
+      describe 'with admin permission' do
+        before do
+          @raid.permissions << Permission.new(:level => 'admin',
+                                              :key => @account.to_permission)
+        end
+
+        describe 'with a signup' do
+          before do
+            @signup = Signup.create(:raid => @raid,
+                                    :character => @character1,
+                                    :note => 'Note',
+                                    :roles => [@dps])
+          end
+
+          it 'PATCH /raids/{id}/signups/{id} should be allowed to change seating and role' do
+            patch "/raids/#{@raid.id}/signups/#{@signup.id}", {
+                    :signup => {
+                      :seated => true,
+                      :role_id => @dps.id }}
+
+            expect(last_response).to be_ok
+            expect(last_response.body).to be_json_eql(true.to_json).at_path('signup/seated')
+            expect(last_response.body).to be_json_eql(@dps.id.to_json).at_path('signup/role')
+            expect(last_response.body).to have_json_size(1).at_path('characters')
+            expect(last_response.body).to have_json_size(1).at_path('guilds')
+            expect(last_response.body).to have_json_size(3).at_path('roles')
+          end
+
+          it 'PATCH /signups/{id} should be allowed to change seating and role' do
+            patch "/signups/#{@signup.id}", {
+                    :signup => {
+                      :raid => @raid.id,
+                      :seated => true,
+                      :role_id => @dps.id }}
+
+            expect(last_response).to be_ok
+            expect(last_response.body).to be_json_eql(true.to_json).at_path('signup/seated')
+            expect(last_response.body).to be_json_eql(@dps.id.to_json).at_path('signup/role')
             expect(last_response.body).to have_json_size(1).at_path('characters')
             expect(last_response.body).to have_json_size(1).at_path('guilds')
             expect(last_response.body).to have_json_size(3).at_path('roles')
