@@ -96,6 +96,32 @@ RSpec.describe 'Raids Api', :type => :api do
             expect(last_response.body).to have_json_size(3).at_path('roles')
           end
 
+          it 'POST /raids/{id}/signups twice should show an error the second time' do
+            post "/raids/#{@raid.id}/signups", {
+                   :signup => {
+                     :raid_id => @raid.id,
+                     :character_id => @character1.id,
+                     :note => 'Note',
+                     :role_ids => [@dps.id] }}
+
+            expect(last_response).to be_ok
+            expect(last_response.body).to be_json_eql('Note'.to_json).at_path('signup/note')
+            expect(last_response.body).to be_json_eql([@dps.id].to_json).at_path('signup/roles')
+            expect(last_response.body).to have_json_size(1).at_path('characters')
+            expect(last_response.body).to have_json_size(1).at_path('guilds')
+            expect(last_response.body).to have_json_size(3).at_path('roles')
+
+            post "/raids/#{@raid.id}/signups", {
+                   :signup => {
+                     :raid_id => @raid.id,
+                     :character_id => @character1.id,
+                     :note => 'Note',
+                     :role_ids => [@dps.id] }}
+
+            expect(last_response).to_not be_ok
+            expect(last_response.status).to equal(400)
+          end
+
           it 'POST /raids/{id}/signups with ember style param names should create a signup' do
             post "/raids/#{@raid.id}/signups", {
                    :signup => {
