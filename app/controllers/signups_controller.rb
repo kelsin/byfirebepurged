@@ -29,8 +29,12 @@ class SignupsController < ApplicationController
 
     if can? :manage, @signup.raid
       @signup.seated = params[:signup][:seated] if params[:signup].has_key?(:seated)
-      @signup.role_id = params[:signup][:role_id] if params[:signup].has_key?(:role_id)
-      @signup.role = params[:signup][:role] if params[:signup].has_key?(:role)
+
+      if params[:signup].has_key?(:role_id)
+        @signup.role_id = params[:signup][:role_id]
+      elsif params[:signup].has_key?(:role)
+        @signup.role_id = params[:signup][:role]
+      end
     end
 
     if @signup.update(converted_params)
