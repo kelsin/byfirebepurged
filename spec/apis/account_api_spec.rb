@@ -45,7 +45,7 @@ RSpec.describe "Account Api", :type => :api do
           expect(last_response.body).to have_json_size(2).at_path("account/characters")
           expect(last_response.body).to have_json_size(2).at_path("characters")
           expect(last_response.body).to have_json_size(1).at_path("guilds")
-          expect(last_response.body).to have_json_size(0).at_path("roles")
+          expect(last_response.body).to have_json_size(3).at_path("roles")
           expect(last_response.body).to have_json_size(4).at_path("permissions")
         end
       end

@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe 'Raids Api', :type => :api do
   before do
     header 'Accept', 'application/json+ember'
-    create_roles
   end
 
   describe 'with a valid raid' do
