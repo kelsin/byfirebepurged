@@ -19,6 +19,7 @@ namespace :doc do
     rdoc.rdoc_files.include('README.md')
   end
 
+  desc "Deploy the documentation to github"
   task :deploy => :app do
     Dir.chdir('doc') do
       `git clone git@github.com:kelsin/docs.byfirebepurged.com.git -n temp`

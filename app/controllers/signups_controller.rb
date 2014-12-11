@@ -1,11 +1,11 @@
 class SignupsController < ApplicationController
-  before_action :load_raid, :except => :destroy
-
   def index
+    @raid = Raid.find(params[:raid_id])
     authorize! :read, @raid
   end
 
   def create
+    @raid = Raid.find(params[:raid_id] || converted_params[:raid_id])
     @character = Character.find(converted_params[:character_id])
     @signup = Signup.new(converted_params)
     @signup.raid = @raid
@@ -24,9 +24,14 @@ class SignupsController < ApplicationController
   end
 
   def update
-    @signup = @raid.signups.find(params[:id])
-
+    @signup = Signup.find(params[:id])
     authorize! :update, @signup
+
+    if can? :manage, @signup.raid
+      @signup.seated = params[:signup][:seated] if params[:signup].has_key?(:seated)
+      @signup.role_id = params[:signup][:role_id] if params[:signup].has_key?(:role_id)
+      @signup.role = params[:signup][:role] if params[:signup].has_key?(:role)
+    end
 
     if @signup.update(converted_params)
       render :show
@@ -48,7 +53,8 @@ class SignupsController < ApplicationController
   end
 
   def show
-    @signup = @raid.signups.find(params[:id])
+    @signup = Signup.find(params[:id])
+    authorize! :read, @signup.raid
     authorize! :read, @signup
   end
 
@@ -56,7 +62,6 @@ class SignupsController < ApplicationController
 
   def mappings
     { :character => :character_id,
-      :role => :role_id,
       :raid => :raid_id,
       :roles => :role_ids }
   end
@@ -64,14 +69,7 @@ class SignupsController < ApplicationController
   def allowed_params
     params.require(:signup).permit(:character, :character_id,
                                    :raid, :raid_id,
-                                   :role, :role_id,
                                    { :roles => [] }, { :role_ids => [] },
-                                   :note, :preferred, :seated)
-  end
-
-  def load_raid
-    raid_id = params[:raid_id] || converted_params[:raid_id]
-    @raid = Raid.find(raid_id) if raid_id
-    authorize! :read, @raid if @raid
+                                   :note, :preferred)
   end
 end

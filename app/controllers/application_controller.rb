@@ -45,18 +45,10 @@ class ApplicationController < ActionController::Base
     @roles ||= Role.includes(:class_roles).all
   end
 
-  def mappings
-    {}
-  end
-
   def converted_params
     allowed_params.map do |k, v|
       [mappings[k.to_sym] || k.to_sym, v]
     end.to_h
-  end
-
-  def allowed_params
-    params
   end
 
   def unauthorized(e)

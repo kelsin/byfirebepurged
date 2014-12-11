@@ -42,7 +42,7 @@ RSpec.describe "Raids Api", :type => :api do
         expect(last_response.body).to have_json_size(0).at_path("signups")
         expect(last_response.body).to have_json_size(0).at_path("characters")
         expect(last_response.body).to have_json_size(0).at_path("guilds")
-        expect(last_response.body).to have_json_size(0).at_path("roles")
+        expect(last_response.body).to have_json_size(3).at_path("roles")
       end
 
       it '/raids/{id} should return a 401' do
@@ -57,6 +57,22 @@ RSpec.describe "Raids Api", :type => :api do
 
         expect(last_response).to_not be_ok
         expect(last_response.status).to equal(404)
+      end
+
+      it 'POST /raids should create a raid and setup admin permission' do
+        date = 5.hours.from_now
+
+        post '/raids', {
+               :raid => {
+                 :name => 'New Raid Name',
+                 :date => date }}
+
+        expect(last_response).to be_ok
+        expect(last_response.body).to have_json_path('raid')
+        expect(last_response.body).to be_json_eql('New Raid Name'.to_json).at_path('raid/name')
+        expect(last_response.body).to have_json_size(1).at_path('raid/permissions')
+        expect(last_response.body).to have_json_size(1).at_path('permissions')
+        expect(last_response.body).to be_json_eql(@account.to_permission.to_json).at_path('permissions/0/key')
       end
     end
 
@@ -73,7 +89,7 @@ RSpec.describe "Raids Api", :type => :api do
         expect(last_response.body).to have_json_size(0).at_path("signups")
         expect(last_response.body).to have_json_size(0).at_path("characters")
         expect(last_response.body).to have_json_size(0).at_path("guilds")
-        expect(last_response.body).to have_json_size(0).at_path("roles")
+        expect(last_response.body).to have_json_size(3).at_path("roles")
       end
 
       it "/raids/{id} should return a 401" do
@@ -106,7 +122,7 @@ RSpec.describe "Raids Api", :type => :api do
         expect(last_response.body).to have_json_size(0).at_path("signups")
         expect(last_response.body).to have_json_size(0).at_path("characters")
         expect(last_response.body).to have_json_size(0).at_path("guilds")
-        expect(last_response.body).to have_json_size(0).at_path("roles")
+        expect(last_response.body).to have_json_size(3).at_path("roles")
       end
 
       it "/raids/{id} should return a 401" do
@@ -139,7 +155,7 @@ RSpec.describe "Raids Api", :type => :api do
         expect(last_response.body).to have_json_size(0).at_path("signups")
         expect(last_response.body).to have_json_size(0).at_path("characters")
         expect(last_response.body).to have_json_size(0).at_path("guilds")
-        expect(last_response.body).to have_json_size(0).at_path("roles")
+        expect(last_response.body).to have_json_size(3).at_path("roles")
       end
 
       it '/raids/{id} should return a raid' do
@@ -150,7 +166,7 @@ RSpec.describe "Raids Api", :type => :api do
         expect(last_response.body).to have_json_size(0).at_path("signups")
         expect(last_response.body).to have_json_size(0).at_path("characters")
         expect(last_response.body).to have_json_size(0).at_path("guilds")
-        expect(last_response.body).to have_json_size(0).at_path("roles")
+        expect(last_response.body).to have_json_size(3).at_path("roles")
       end
 
       it 'PUT /raids/{id} should return a 401' do
@@ -176,7 +192,7 @@ RSpec.describe "Raids Api", :type => :api do
         expect(last_response.body).to have_json_size(0).at_path("signups")
         expect(last_response.body).to have_json_size(0).at_path("characters")
         expect(last_response.body).to have_json_size(0).at_path("guilds")
-        expect(last_response.body).to have_json_size(0).at_path("roles")
+        expect(last_response.body).to have_json_size(3).at_path("roles")
       end
 
       it '/raids/{id} should return a raid' do
@@ -187,7 +203,7 @@ RSpec.describe "Raids Api", :type => :api do
         expect(last_response.body).to have_json_size(0).at_path("signups")
         expect(last_response.body).to have_json_size(0).at_path("characters")
         expect(last_response.body).to have_json_size(0).at_path("guilds")
-        expect(last_response.body).to have_json_size(0).at_path("roles")
+        expect(last_response.body).to have_json_size(3).at_path("roles")
       end
 
       it 'PUT /raids/{id} should edit the raid' do
@@ -225,7 +241,7 @@ RSpec.describe "Raids Api", :type => :api do
           expect(last_response.body).to have_json_size(0).at_path("signups")
           expect(last_response.body).to have_json_size(0).at_path("characters")
           expect(last_response.body).to have_json_size(0).at_path("guilds")
-          expect(last_response.body).to have_json_size(0).at_path("roles")
+          expect(last_response.body).to have_json_size(3).at_path("roles")
         end
 
         it '/raids/{id} should return a raid' do
@@ -236,7 +252,7 @@ RSpec.describe "Raids Api", :type => :api do
           expect(last_response.body).to have_json_size(0).at_path("signups")
           expect(last_response.body).to have_json_size(0).at_path("characters")
           expect(last_response.body).to have_json_size(0).at_path("guilds")
-          expect(last_response.body).to have_json_size(0).at_path("roles")
+          expect(last_response.body).to have_json_size(3).at_path("roles")
         end
 
         it 'PUT /raids/{id} should return a 401' do
@@ -262,7 +278,7 @@ RSpec.describe "Raids Api", :type => :api do
           expect(last_response.body).to have_json_size(0).at_path("signups")
           expect(last_response.body).to have_json_size(0).at_path("characters")
           expect(last_response.body).to have_json_size(0).at_path("guilds")
-          expect(last_response.body).to have_json_size(0).at_path("roles")
+          expect(last_response.body).to have_json_size(3).at_path("roles")
         end
 
         it '/raids/{id} should return a raid' do
@@ -273,7 +289,7 @@ RSpec.describe "Raids Api", :type => :api do
           expect(last_response.body).to have_json_size(0).at_path("signups")
           expect(last_response.body).to have_json_size(0).at_path("characters")
           expect(last_response.body).to have_json_size(0).at_path("guilds")
-          expect(last_response.body).to have_json_size(0).at_path("roles")
+          expect(last_response.body).to have_json_size(3).at_path("roles")
         end
 
         it 'PUT /raids/{id} should return a 401' do

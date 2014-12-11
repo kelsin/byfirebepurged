@@ -127,6 +127,7 @@ RSpec.configure do |config|
 
   config.around(:each) do |example|
     DatabaseCleaner.cleaning do
+      create_roles
       example.run
     end
   end

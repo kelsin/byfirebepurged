@@ -63,22 +63,4 @@ FactoryGirl.define do
       requiredItemLevel 640
     end
   end
-
-  factory :dps_role, :class => Role do
-    name 'DPS'
-    slug 'dps'
-    icon 'dps-icon'
-  end
-
-  factory :healing_role, :class => Role do
-    name 'Healing'
-    slug 'healing'
-    icon 'healing-icon'
-  end
-
-  factory :tank_role, :class => Role do
-    name 'Tank'
-    slug 'tank'
-    icon 'tank-icon'
-  end
 end
