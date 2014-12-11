@@ -2,7 +2,6 @@ class SignupsController < ApplicationController
   before_action :load_raid, :except => :destroy
 
   def index
-    authorize! :read, @raid
   end
 
   def create
