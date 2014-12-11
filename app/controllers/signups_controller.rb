@@ -1,10 +1,11 @@
 class SignupsController < ApplicationController
-  before_action :load_raid, :except => :destroy
-
   def index
+    @raid = Raid.find(params[:raid_id])
+    authorize! :read, @raid
   end
 
   def create
+    @raid = Raid.find(params[:raid_id] || converted_params[:raid_id])
     @character = Character.find(converted_params[:character_id])
     @signup = Signup.new(converted_params)
     @signup.raid = @raid
@@ -23,8 +24,8 @@ class SignupsController < ApplicationController
   end
 
   def update
-    @signup = @raid.signups.find(params[:id])
-
+    @signup = Signup.find(params[:id])
+    authorize! :read, @signup.raid
     authorize! :update, @signup
 
     if @signup.update(converted_params)
@@ -47,7 +48,8 @@ class SignupsController < ApplicationController
   end
 
   def show
-    @signup = @raid.signups.find(params[:id])
+    @signup = Signup.find(params[:id])
+    authorize! :read, @signup.raid
     authorize! :read, @signup
   end
 
@@ -66,11 +68,5 @@ class SignupsController < ApplicationController
                                    :role, :role_id,
                                    { :roles => [] }, { :role_ids => [] },
                                    :note, :preferred, :seated)
-  end
-
-  def load_raid
-    raid_id = params[:raid_id] || converted_params[:raid_id]
-    @raid = Raid.find(raid_id) if raid_id
-    authorize! :read, @raid if @raid
   end
 end

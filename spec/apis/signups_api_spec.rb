@@ -37,6 +37,32 @@ RSpec.describe 'Raids Api', :type => :api do
         expect(last_response.status).to equal(401)
       end
 
+      describe 'with a signup from another character' do
+        before do
+          @other_character = create :character
+          @raid.permissions << Permission.new(:level => 'member',
+                                              :key => @other_character.to_permission)
+          @signup = Signup.create(:raid => @raid,
+                                  :character => @other_character,
+                                  :note => 'Note',
+                                  :roles => [@dps])
+        end
+
+        it 'GET /raids/{id}/signups/{id} should return a 401' do
+          get "/raids/#{@raid.id}/signups/#{@signup.id}"
+
+          expect(last_response).to_not be_ok
+          expect(last_response.status).to equal(401)
+        end
+
+        it 'GET /signups/{id} should return a 401' do
+          get "/signups/#{@signup.id}"
+
+          expect(last_response).to_not be_ok
+          expect(last_response.status).to equal(401)
+        end
+      end
+
       describe 'with member permission' do
         before do
           @raid.permissions << Permission.new(:level => 'member',
@@ -161,6 +187,36 @@ RSpec.describe 'Raids Api', :type => :api do
             expect(last_response).to_not be_ok
             expect(last_response.status).to equal(400)
           end
+
+          describe 'with a random character' do
+            before do
+              @other_character = create :character
+            end
+
+            it 'POST /raids/{id}/signups with another users character should fail' do
+              post "/raids/#{@raid.id}/signups", {
+                     :signup => {
+                       :raid_id => @raid.id,
+                       :character_id => @other_character.id,
+                       :note => 'Note',
+                       :role_ids => [] }}
+
+              expect(last_response).to_not be_ok
+              expect(last_response.status).to equal(401)
+            end
+
+            it 'POST /signups with another users character should fail' do
+              post '/signups', {
+                     :signup => {
+                       :raid_id => @raid.id,
+                       :character_id => @other_character.id,
+                       :note => 'Note',
+                       :role_ids => [] }}
+
+              expect(last_response).to_not be_ok
+              expect(last_response.status).to equal(401)
+            end
+          end
         end
 
         describe 'with a signup' do
@@ -177,6 +233,51 @@ RSpec.describe 'Raids Api', :type => :api do
             expect(last_response).to be_ok
             expect(last_response.body).to have_json_size(1).at_path('signups')
             expect(last_response.body).to be_json_eql('Note'.to_json).at_path('signups/0/note')
+            expect(last_response.body).to have_json_size(1).at_path('characters')
+            expect(last_response.body).to have_json_size(1).at_path('guilds')
+            expect(last_response.body).to have_json_size(3).at_path('roles')
+          end
+
+          it 'GET /raids/{id}/signups/{id} should return the signup' do
+            get "/raids/#{@raid.id}/signups/#{@signup.id}"
+
+            expect(last_response).to be_ok
+            expect(last_response.body).to be_json_eql('Note'.to_json).at_path('signup/note')
+            expect(last_response.body).to have_json_size(1).at_path('characters')
+            expect(last_response.body).to have_json_size(1).at_path('guilds')
+            expect(last_response.body).to have_json_size(3).at_path('roles')
+          end
+
+          it 'GET /signups/{id} should return the signup' do
+            get "/signups/#{@signup.id}"
+
+            expect(last_response).to be_ok
+            expect(last_response.body).to be_json_eql('Note'.to_json).at_path('signup/note')
+            expect(last_response.body).to have_json_size(1).at_path('characters')
+            expect(last_response.body).to have_json_size(1).at_path('guilds')
+            expect(last_response.body).to have_json_size(3).at_path('roles')
+          end
+
+          it 'PATCH /raids/{id}/signups/{id} should be allowed to change the note' do
+            patch "/raids/#{@raid.id}/signups/#{@signup.id}", {
+                    :signup => {
+                      :note => 'New Note' }}
+
+            expect(last_response).to be_ok
+            expect(last_response.body).to be_json_eql('New Note'.to_json).at_path('signup/note')
+            expect(last_response.body).to have_json_size(1).at_path('characters')
+            expect(last_response.body).to have_json_size(1).at_path('guilds')
+            expect(last_response.body).to have_json_size(3).at_path('roles')
+          end
+
+          it 'PATCH /signups/{id} should be allowed to change the note' do
+            patch "/signups/#{@signup.id}", {
+                    :signup => {
+                      :raid_id => @raid.id,
+                      :note => 'New Note' }}
+
+            expect(last_response).to be_ok
+            expect(last_response.body).to be_json_eql('New Note'.to_json).at_path('signup/note')
             expect(last_response.body).to have_json_size(1).at_path('characters')
             expect(last_response.body).to have_json_size(1).at_path('guilds')
             expect(last_response.body).to have_json_size(3).at_path('roles')
