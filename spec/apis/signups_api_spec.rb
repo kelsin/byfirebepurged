@@ -368,6 +368,38 @@ RSpec.describe 'Raids Api', :type => :api do
 
             expect(Signup.where(:id => @signup.id).count).to equal(0)
           end
+
+          describe 'with a seated signup' do
+            before do
+              @signup.seated = true
+              @signup.role = @dps
+              @signup.save
+            end
+
+            it 'should not show as seated' do
+              get "/raids/#{@raid.id}/signups/#{@signup.id}"
+
+              expect(last_response).to be_ok
+              expect(last_response.body).to be_json_eql(false.to_json).at_path('signup/seated')
+              expect(last_response.body).to be_json_eql(nil.to_json).at_path('signup/role')
+            end
+
+            describe 'with a finalized raid' do
+              before do
+                @raid.finalized = true
+                @raid.save
+                @signup.reload
+              end
+
+              it 'should show as seated' do
+                get "/raids/#{@raid.id}/signups/#{@signup.id}"
+
+                expect(last_response).to be_ok
+                expect(last_response.body).to be_json_eql(true.to_json).at_path('signup/seated')
+                expect(last_response.body).to be_json_eql(@dps.id.to_json).at_path('signup/role')
+              end
+            end
+          end
         end
       end
 
