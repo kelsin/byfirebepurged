@@ -153,6 +153,7 @@ RSpec.describe "Raids Api", :type => :api do
         expect(last_response).to be_ok
         expect(last_response.body).to have_json_size(1).at_path("raids")
         expect(last_response.body).to be_json_eql(false.to_json).at_path('raids/0/admin')
+        expect(last_response.body).to be_json_eql(true.to_json).at_path('raids/0/hidden')
         expect(last_response.body).to have_json_size(0).at_path("signups")
         expect(last_response.body).to have_json_size(0).at_path("characters")
         expect(last_response.body).to have_json_size(0).at_path("guilds")
@@ -165,6 +166,7 @@ RSpec.describe "Raids Api", :type => :api do
         expect(last_response).to be_ok
         expect(last_response.body).to be_json_eql(@raid.name.to_json).at_path("raid/name")
         expect(last_response.body).to be_json_eql(false.to_json).at_path('raid/admin')
+        expect(last_response.body).to be_json_eql(true.to_json).at_path('raid/hidden')
         expect(last_response.body).to have_json_size(0).at_path("signups")
         expect(last_response.body).to have_json_size(0).at_path("characters")
         expect(last_response.body).to have_json_size(0).at_path("guilds")
@@ -192,6 +194,7 @@ RSpec.describe "Raids Api", :type => :api do
         expect(last_response).to be_ok
         expect(last_response.body).to have_json_size(1).at_path("raids")
         expect(last_response.body).to be_json_eql(true.to_json).at_path('raids/0/admin')
+        expect(last_response.body).to be_json_eql(true.to_json).at_path('raids/0/hidden')
         expect(last_response.body).to have_json_size(0).at_path("signups")
         expect(last_response.body).to have_json_size(0).at_path("characters")
         expect(last_response.body).to have_json_size(0).at_path("guilds")
@@ -204,6 +207,7 @@ RSpec.describe "Raids Api", :type => :api do
         expect(last_response).to be_ok
         expect(last_response.body).to be_json_eql(@raid.name.to_json).at_path("raid/name")
         expect(last_response.body).to be_json_eql(true.to_json).at_path('raid/admin')
+        expect(last_response.body).to be_json_eql(true.to_json).at_path('raid/hidden')
         expect(last_response.body).to have_json_size(0).at_path("signups")
         expect(last_response.body).to have_json_size(0).at_path("characters")
         expect(last_response.body).to have_json_size(0).at_path("guilds")

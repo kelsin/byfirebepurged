@@ -1,4 +1,4 @@
-json.extract! raid, :id, :name, :date, :note, :finalized
+json.extract! raid, :id, :name, :date, :note, :finalized, :hidden
 json.account raid.account_id
 json.admin @account.admin?(raid)
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141208064052) do
+ActiveRecord::Schema.define(version: 20141214160627) do
 
   create_table "accounts", force: true do |t|
     t.string   "battletag"
@@ -89,6 +89,7 @@ ActiveRecord::Schema.define(version: 20141208064052) do
     t.integer  "requiredItemLevel"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "hidden",            default: true,  null: false
   end
 
   add_index "raids", ["account_id"], name: "index_raids_on_account_id"
