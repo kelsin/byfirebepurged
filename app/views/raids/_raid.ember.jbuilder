@@ -8,3 +8,4 @@ json.groups do
 end
 
 json.signups raid.signup_ids
+json.permissions @raid.permission_ids if can? :manage, @raid

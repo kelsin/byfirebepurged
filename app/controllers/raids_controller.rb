@@ -13,6 +13,9 @@ class RaidsController < ApplicationController
     end
     @all_characters = @all_signups.map(&:character).uniq.sort
     @all_guilds = @all_characters.map(&:guild).uniq.compact.sort
+    @all_permissions = @raids.inject([]) do |permissions, raid|
+      permissions + raid.permissions
+    end
   end
 
   def show
