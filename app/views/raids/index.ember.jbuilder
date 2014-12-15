@@ -8,6 +8,6 @@ json.characters @all_characters, :partial => 'characters/character', :as => :cha
 json.guilds @all_guilds, :partial => 'guilds/guild', :as => :guild
 json.roles roles, :partial => 'roles/role', :as => :role
 
-if can? :manage, @raid
+unless @all_permissions.empty?
   json.permissions @all_permissions, :partial => 'permissions/permission', :as => :permission
 end
