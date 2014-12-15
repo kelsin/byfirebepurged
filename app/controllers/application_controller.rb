@@ -25,12 +25,20 @@ class ApplicationController < ActionController::Base
     @current_ability ||= Ability.new(current_account)
   end
 
-  def authenticate
+  def getKey
     authorization = request.headers['Authorization']
-    raise ::Exceptions::AuthenticationError, "Must provide Authorization header" unless authorization
 
-    key = /apikey ([\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12})/.match(authorization).try(:[], 1)
-    raise ::Exceptions::AuthenticationError, "Unable to parse apikey" unless key
+    if authorization
+      key = /apikey ([\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12})/.match(authorization).try(:[], 1)
+      raise ::Exceptions::AuthenticationError, "Unable to parse apikey" unless key
+    end
+
+    key || params[:apikey]
+  end
+
+  def authenticate
+    key = getKey
+    raise ::Exceptions::AuthenticationError, "Must provide Authorization header or apikey query param" unless key
 
     @session = Session.includes(:account).find_by_key(key)
     raise ::Exceptions::AuthenticationError, "Invalid apikey" unless @session
