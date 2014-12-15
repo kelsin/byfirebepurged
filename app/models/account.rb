@@ -45,7 +45,7 @@ class Account < ActiveRecord::Base
   end
 
   def to_permission
-    "Account|#{account_id}"
+    "Account|#{battletag}"
   end
 
   def available_raids
