@@ -25,6 +25,7 @@ class SignupsController < ApplicationController
 
   def update
     @signup = Signup.find(params[:id])
+    @raid = @signup.raid
     authorize! :update, @signup
 
     if can? :manage, @signup.raid
@@ -46,7 +47,8 @@ class SignupsController < ApplicationController
 
   def destroy
     @signup = Signup.find(params[:id])
-    authorize! :read, @signup.raid
+    @raid = @signup.raid
+    authorize! :read, @raid
     authorize! :destroy, @signup
 
     if @signup.destroy
@@ -58,7 +60,8 @@ class SignupsController < ApplicationController
 
   def show
     @signup = Signup.find(params[:id])
-    authorize! :read, @signup.raid
+    @raid = @signup.raid
+    authorize! :read, @raid
     authorize! :read, @signup
   end
 

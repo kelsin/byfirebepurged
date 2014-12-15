@@ -5,9 +5,13 @@ module ApiHelper
     Rails.application
   end
 
-  def login
+  def login_without_header
     @session = create :session
     @account = @session.account
+  end
+
+  def login
+    login_without_header
     header 'Authorization', "apikey #{@session.key}"
   end
 

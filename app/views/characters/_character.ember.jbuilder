@@ -4,4 +4,4 @@ json.extract! character,
 json.account character.account_id
 json.guild character.guild_id
 json.roles character.role_ids
-json.permissions character.permissions
+json.permission character.to_permission

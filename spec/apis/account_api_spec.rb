@@ -15,6 +15,21 @@ RSpec.describe "Account Api", :type => :api do
       end
     end
 
+    describe 'while logged in using query param' do
+      before do
+        login_without_header
+      end
+
+      it 'should return account information' do
+        get '/account', :apikey => @session.key
+
+        expect(last_response).to be_ok
+        expect(last_response.body).to be_json_eql(@account.battletag.to_json).at_path('account/battletag')
+        expect(last_response.body).to be_json_eql(@account.account_id.to_s.to_json).at_path('account/account_id')
+        expect(last_response.body).to be_json_eql(@account.id.to_json).at_path('account/id')
+      end
+    end
+
     describe 'while logged in' do
       before do
         login

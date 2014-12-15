@@ -7,3 +7,7 @@ json.signups @all_signups, :partial => 'signups/signup', :as => :signup
 json.characters @all_characters, :partial => 'characters/character', :as => :character
 json.guilds @all_guilds, :partial => 'guilds/guild', :as => :guild
 json.roles roles, :partial => 'roles/role', :as => :role
+
+unless @all_permissions.empty?
+  json.permissions @all_permissions, :partial => 'permissions/permission', :as => :permission
+end

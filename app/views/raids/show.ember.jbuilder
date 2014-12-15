@@ -1,6 +1,5 @@
 json.raid do
   json.partial! 'raids/raid', :raid => @raid
-  json.permissions @raid.permission_ids if can? :manage, @raid
 end
 
 json.accounts [@raid.account], :partial => 'accounts/account', :as => :account
