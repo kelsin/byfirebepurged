@@ -15,7 +15,7 @@ class RaidsController < ApplicationController
     @all_guilds = @all_characters.map(&:guild).uniq.compact.sort
     @all_permissions = @raids.inject([]) do |permissions, raid|
       if can? :manage, raid
-        raid.permissions
+        raid.permissions(true)
       else
         []
       end + permissions
