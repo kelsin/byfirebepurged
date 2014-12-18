@@ -224,6 +224,24 @@ RSpec.describe "Raids Api", :type => :api do
       end
     end
 
+    describe 'with extra permissions' do
+      before do
+        @raid = create :raid
+        @raid.permissions << Permission.new(:level => 'admin',
+                                            :key => @account.to_permission)
+        @raid.permissions << Permission.new(:level => 'member',
+                                            :key => 'Account|random#9999')
+      end
+
+      it '/raids should return all permissions' do
+        get '/raids'
+
+        expect(last_response).to be_ok
+        expect(last_response.body).to have_json_size(1).at_path("raids")
+        expect(last_response.body).to have_json_size(2).at_path("permissions")
+      end
+    end
+
     describe 'with 2 characters' do
       before do
         @character1 = create(:character,
