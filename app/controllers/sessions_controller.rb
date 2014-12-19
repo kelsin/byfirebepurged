@@ -69,16 +69,11 @@ class SessionsController < ApplicationController
     end
 
     # Now create a session for this user
-    begin
-      @session = Session.find_or_initialize_by(:access_token => auth_hash['credentials']['token'],
-                                               :account_id => @account.id)
-    rescue ActiveRecord::RecordNotUnique
-      retry
-    end
+    @session = Session.create(:access_token => auth_hash['credentials']['token'],
+                              :account_id => @account.id,
+                              :key => SecureRandom.uuid)
 
-    unless @session and @session.update(:key => SecureRandom.uuid)
-      raise Exceptions::ByFireBePurgedError, 'Error attempting to find and update session'
-    end
+    raise Exceptions::ByFireBePurgedError, 'Error creating session' unless @session
 
     # Update characters if it's been an hour since last login
     update_characters
