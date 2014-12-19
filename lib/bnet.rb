@@ -14,7 +14,7 @@ class Bnet
 
   # Loads a character from the wow api
   def character(name, realm)
-    self.class.get("/wow/character/#{realm}/#{name}",
+    self.class.get("/wow/character/#{CGI::escape realm}/#{CGI::escape name}",
                    :query => {
                      'fields' => 'items',
                      'apikey' => ENV['BNET_KEY']
