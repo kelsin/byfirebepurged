@@ -49,7 +49,7 @@ class RaidsController < ApplicationController
   private
 
   def raid_params
-    params.require(:raid).permit(:name, :date, :finalized, :note,
+    params.require(:raid).permit(:name, :date, :finalized, :note, :hidden,
                                  :groups, :size, :tanks, :healers,
                                  :requiredLevel, :requiredItemLevel)
   end
