@@ -38,6 +38,10 @@ class Raid < ActiveRecord::Base
     signups.map(&:character)
   end
 
+  def accounts
+    (characters.map(&:account) + [self.account]).sort.uniq
+  end
+
   def guilds
     characters.map(&:guild).uniq.compact.sort
   end

@@ -7,11 +7,11 @@ class RaidsController < ApplicationController
       authorize! :read, raid
     end
 
-    @all_accounts = @raids.map(&:account).uniq.sort
     @all_signups = @raids.inject([]) do |signups, raid|
       signups + raid.signups
     end
     @all_characters = @all_signups.map(&:character).uniq.sort
+    @all_accounts = (@raids.map(&:account) + @all_characters.map(&:account)).uniq.sort
     @all_guilds = @all_characters.map(&:guild).uniq.compact.sort
     @all_permissions = @raids.inject([]) do |permissions, raid|
       if can? :manage, raid
