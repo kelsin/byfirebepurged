@@ -30,6 +30,15 @@ class Raid < ActiveRecord::Base
     includes(:signups => { :character => :guild })
   end
 
+  def self.with_account
+    includes(:account)
+  end
+
+  def self.for_permissions(permissions)
+    joins("JOIN permissions as p ON p.permissioned_id = raids.id AND p.permissioned_type = 'Raid'")
+      .where('lower(p.key) in (?)', permissions.map(&:downcase))
+  end
+
   def self.old
     unscoped { includes(:permissions).where('date <= ?', 6.hours.ago) }
   end
