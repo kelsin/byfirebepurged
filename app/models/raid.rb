@@ -18,9 +18,9 @@ class Raid < ActiveRecord::Base
               :allow_nil => true
             }
 
-  # By default only deal with raids that are in the future, or under 6 hours
-  # past start time.
-  default_scope { with_permissions.with_signups.where('date > ?', 6.hours.ago) }
+  def self.current
+    where('date > ?', 6.hours.ago)
+  end
 
   def self.with_permissions
     includes(:permissions)
