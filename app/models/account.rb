@@ -49,11 +49,7 @@ class Account < ActiveRecord::Base
   end
 
   def available_raids
-    @available_raids ||= Raid.includes(:account,
-                                       :permissions,
-                                       :signups => { :character => :guild })
-                       .joins("JOIN permissions as p ON permissions.permissioned_id = raids.id AND permissions.permissioned_type = 'Raid'")
-                       .where('p' => { :key => permissions })
+    @available_raids ||= Raid.current.with_account.with_permissions.with_signups.for_permissions(permissions)
   end
 
   def permissions
