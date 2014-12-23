@@ -52,8 +52,8 @@ class Account < ActiveRecord::Base
     @available_raids ||= Raid.current.includes(:account,
                                                :permissions,
                                                :signups => { :character => :guild })
-                       .joins("JOIN permissions as p ON permissions.permissioned_id = raids.id AND permissions.permissioned_type = 'Raid'")
-                       .where('p' => { :key => permissions })
+                       .joins("JOIN permissions as p ON p.permissioned_id = raids.id AND p.permissioned_type = 'Raid'")
+                       .where('lower(p.key) in (?)', permissions.map(&:downcase))
   end
 
   def permissions
