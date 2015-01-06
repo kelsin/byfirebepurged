@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141214160627) do
+ActiveRecord::Schema.define(version: 20150106033131) do
 
   create_table "accounts", force: true do |t|
     t.string   "battletag"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20141214160627) do
     t.boolean  "admin",      default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "key",                        null: false
   end
 
   create_table "characters", force: true do |t|
@@ -90,9 +91,11 @@ ActiveRecord::Schema.define(version: 20141214160627) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "hidden",            default: true,  null: false
+    t.integer  "guild_id"
   end
 
   add_index "raids", ["account_id"], name: "index_raids_on_account_id"
+  add_index "raids", ["guild_id"], name: "index_raids_on_guild_id"
 
   create_table "roles", force: true do |t|
     t.string   "name"

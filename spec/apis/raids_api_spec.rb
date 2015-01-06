@@ -74,6 +74,42 @@ RSpec.describe "Raids Api", :type => :api do
         expect(last_response.body).to have_json_size(1).at_path('permissions')
         expect(last_response.body).to be_json_eql(@account.to_permission.to_json).at_path('permissions/0/key')
       end
+
+      describe 'with a guild' do
+        before do
+          @character = create(:character,
+                              :account => @account)
+          @guild = @character.guild
+        end
+
+        it 'POST /raids should create a raid with a guild' do
+          date = 5.hours.from_now
+
+          post '/raids', {
+                 :raid => {
+                   :name => 'New Raid Name',
+                   :guild => @guild.id,
+                   :date => date }}
+
+          expect(last_response).to be_ok
+          expect(last_response.body).to be_json_eql(@guild.id).at_path("raid/guild")
+          expect(last_response.body).to have_json_size(1).at_path('guilds')
+        end
+
+        it 'POST /raids should create a raid with a guild_id' do
+          date = 5.hours.from_now
+
+          post '/raids', {
+                 :raid => {
+                   :name => 'New Raid Name',
+                   :guild_id => @guild.id,
+                   :date => date }}
+
+          expect(last_response).to be_ok
+          expect(last_response.body).to be_json_eql(@guild.id).at_path("raid/guild")
+          expect(last_response.body).to have_json_size(1).at_path('guilds')
+        end
+      end
     end
 
     describe 'with a no-permission raid' do
@@ -250,6 +286,37 @@ RSpec.describe "Raids Api", :type => :api do
         @character2 = create(:character,
                              :guild => @guild,
                              :account => @account)
+      end
+
+      describe 'with a guild-permission guild raid' do
+        before do
+          @raid = create :raid, :guild => @guild
+          @raid.permissions << Permission.new(:level => 'member',
+                                              :key => @guild.to_permission)
+        end
+
+        it '/raids should return 1 result' do
+          get '/raids'
+
+          expect(last_response).to be_ok
+          expect(last_response.body).to have_json_size(1).at_path("raids")
+          expect(last_response.body).to have_json_size(0).at_path("signups")
+          expect(last_response.body).to have_json_size(0).at_path("characters")
+          expect(last_response.body).to have_json_size(1).at_path("guilds")
+          expect(last_response.body).to have_json_size(3).at_path("roles")
+        end
+
+        it '/raids/{id} should return a raid' do
+          get "/raids/#{@raid.id}"
+
+          expect(last_response).to be_ok
+          expect(last_response.body).to be_json_eql(@raid.name.to_json).at_path("raid/name")
+          expect(last_response.body).to be_json_eql(@guild.id).at_path("raid/guild")
+          expect(last_response.body).to have_json_size(0).at_path("signups")
+          expect(last_response.body).to have_json_size(0).at_path("characters")
+          expect(last_response.body).to have_json_size(1).at_path("guilds")
+          expect(last_response.body).to have_json_size(3).at_path("roles")
+        end
       end
 
       describe 'with a guild-permission raid' do
