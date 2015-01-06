@@ -1,5 +1,6 @@
 json.extract! raid, :id, :name, :date, :note, :finalized, :hidden
 json.account raid.account_id
+json.guild raid.guild_id
 json.admin @account.admin?(raid)
 
 json.groups do

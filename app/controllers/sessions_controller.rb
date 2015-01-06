@@ -59,7 +59,8 @@ class SessionsController < ApplicationController
 
     # Now find or create the account for this Battle.net account
     begin
-      @account = Account.find_or_initialize_by(:account_id => auth_hash['info']['id'])
+      @account = Account.find_or_initialize_by(:account_id => auth_hash['info']['id'],
+                                               :key => SecureRandom.uuid)
     rescue ActiveRecord::RecordNotUnique
       retry
     end

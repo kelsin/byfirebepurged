@@ -8,6 +8,7 @@ FactoryGirl.define do
   factory :account do
     sequence(:battletag, 1000) { |n| "Test##{n}" }
     sequence :account_id, 10000
+    key { SecureRandom.uuid }
 
     factory :admin do
       admin true
