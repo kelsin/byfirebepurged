@@ -59,15 +59,17 @@ class SessionsController < ApplicationController
 
     # Now find or create the account for this Battle.net account
     begin
-      @account = Account.find_or_initialize_by(:account_id => auth_hash['info']['id'],
-                                               :key => SecureRandom.uuid)
+      @account = Account.find_or_initialize_by(:account_id => auth_hash['info']['id'])
     rescue ActiveRecord::RecordNotUnique
       retry
     end
 
-    unless @account and @account.update(:battletag => auth_hash['info']['battletag'])
-      raise Exceptions::ByFireBePurgedError, 'Error attempting to find and update account'
-    end
+    raise Exceptions::ByFireBePurgedError, 'Error attempting to find account' unless @account
+    
+    @account.key ||= SecureRandom.uuid
+    @account.battletag = auth_hash['info']['battletag']
+    
+    raise Exceptions::ByFireBePurgedError, 'Error attempting to update account' unless @account.save
 
     # Now create a session for this user
     @session = Session.create(:access_token => auth_hash['credentials']['token'],
