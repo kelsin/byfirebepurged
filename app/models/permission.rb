@@ -29,6 +29,6 @@ class Permission < ActiveRecord::Base
   end
 
   def self.check(a, b)
-    (a & b).present?
+    (a.map(&:downcase) & b.map(&:downcase)).present?
   end
 end
