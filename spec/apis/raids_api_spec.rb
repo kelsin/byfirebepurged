@@ -26,6 +26,13 @@ RSpec.describe "Raids Api", :type => :api do
       expect(last_response).to_not be_ok
       expect(last_response.status).to equal(401)
     end
+
+    it 'DELETE /raids/{id} should return a 401' do
+      delete '/raids/1'
+
+      expect(last_response).to_not be_ok
+      expect(last_response.status).to equal(401)
+    end
   end
 
   describe 'while logged in' do
@@ -54,6 +61,13 @@ RSpec.describe "Raids Api", :type => :api do
 
       it 'PUT /raids/{id} should return a 404' do
         put '/raids/1', { :raid => { :name => 'New Raid Name' } }
+
+        expect(last_response).to_not be_ok
+        expect(last_response.status).to equal(404)
+      end
+
+      it 'DELETE /raids/{id} should return a 404' do
+        delete '/raids/1'
 
         expect(last_response).to_not be_ok
         expect(last_response.status).to equal(404)
@@ -141,6 +155,13 @@ RSpec.describe "Raids Api", :type => :api do
         expect(last_response).to_not be_ok
         expect(last_response.status).to equal(401)
       end
+
+      it 'DELETE /raids/{id} should return a 401' do
+        delete "/raids/#{@raid.id}"
+
+        expect(last_response).to_not be_ok
+        expect(last_response.status).to equal(401)
+      end
     end
 
     describe 'with a wrong-permission raid' do
@@ -170,6 +191,13 @@ RSpec.describe "Raids Api", :type => :api do
 
       it 'PUT /raids/{id} should return a 401' do
         put "/raids/#{@raid.id}", { :raid => { :name => 'New Raid Name' } }
+
+        expect(last_response).to_not be_ok
+        expect(last_response.status).to equal(401)
+      end
+
+      it 'DELETE /raids/{id} should return a 401' do
+        delete "/raids/#{@raid.id}"
 
         expect(last_response).to_not be_ok
         expect(last_response.status).to equal(401)
@@ -210,7 +238,14 @@ RSpec.describe "Raids Api", :type => :api do
       end
 
       it 'PUT /raids/{id} should return a 401' do
-        put '/raids/1', { :raid => { :name => 'New Raid Name' } }
+        put "/raids/#{@raid.id}", { :raid => { :name => 'New Raid Name' } }
+
+        expect(last_response).to_not be_ok
+        expect(last_response.status).to equal(401)
+      end
+
+      it 'DELETE /raids/{id} should return a 401' do
+        delete "/raids/#{@raid.id}"
 
         expect(last_response).to_not be_ok
         expect(last_response.status).to equal(401)
@@ -257,6 +292,13 @@ RSpec.describe "Raids Api", :type => :api do
 
         @raid.reload
         expect(@raid.name).to eql('New Raid Name')
+      end
+
+      it 'DELETE /raids/{id} should delete the raid' do
+        delete "/raids/#{@raid.id}"
+
+        expect(last_response).to be_ok
+        expect(Raid.count).to equal(0)
       end
     end
 

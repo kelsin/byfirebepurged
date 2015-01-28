@@ -48,6 +48,13 @@ class RaidsController < ApplicationController
     render :show
   end
 
+  def destroy
+    @raid = Raid.find(params[:id])
+    authorize! :destroy, @raid
+    raise Exceptions::ByFireBePurgedError, 'Error deleting raid' unless @raid.destroy
+    render :show
+  end
+
   private
 
   def mappings
