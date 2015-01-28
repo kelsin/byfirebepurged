@@ -1,9 +1,8 @@
 class Raid < ActiveRecord::Base
   belongs_to :account
   belongs_to :guild
-  has_many :signups, :inverse_of => :raid
-
-  has_many :permissions, :as => :permissioned
+  has_many :signups, :inverse_of => :raid, :dependent => :destroy
+  has_many :permissions, :as => :permissioned, :dependent => :destroy
 
   validates :name, :presence => true
   validates :date, :presence => true
