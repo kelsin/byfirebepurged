@@ -96,7 +96,7 @@ RSpec.describe "Raids Api", :type => :api do
           @guild = @character.guild
         end
 
-        it 'POST /raids should create a raid with a guild' do
+        it 'POST /raids should create a raid with a guild and guild permission' do
           date = 5.hours.from_now
 
           post '/raids', {
@@ -108,6 +108,8 @@ RSpec.describe "Raids Api", :type => :api do
           expect(last_response).to be_ok
           expect(last_response.body).to be_json_eql(@guild.id).at_path("raid/guild")
           expect(last_response.body).to have_json_size(1).at_path('guilds')
+          expect(last_response.body).to be_json_eql(@account.to_permission.to_json).at_path('permissions/0/key')
+          expect(last_response.body).to be_json_eql(@guild.to_permission.to_json).at_path('permissions/1/key')
         end
 
         it 'POST /raids should create a raid with a guild_id' do

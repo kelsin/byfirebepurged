@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150106033131) do
+ActiveRecord::Schema.define(version: 20150227213455) do
 
   create_table "accounts", force: true do |t|
     t.string   "battletag"
@@ -54,6 +54,12 @@ ActiveRecord::Schema.define(version: 20150106033131) do
     t.string   "realm"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "backgroun_color"
+    t.integer  "icon"
+    t.integer  "border"
+    t.string   "icon_color"
+    t.string   "border_color"
+    t.string   "background_color"
   end
 
   add_index "guilds", ["name", "realm"], name: "index_guilds_on_name_and_realm"

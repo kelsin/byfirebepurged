@@ -31,6 +31,10 @@ class RaidsController < ApplicationController
     @raid.account = @account
     @raid.permissions << Permission.new(:key => @account.to_permission, :level => 'admin')
 
+    if @raid.guild
+      @raid.permissions << Permission.new(:key => @raid.guild.to_permission, :level => 'member')
+    end
+
     raise Exceptions::ByFireBePurgedError, 'Error saving raid' unless @raid.save
     render :show
   end
