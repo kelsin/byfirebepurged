@@ -65,10 +65,10 @@ class SessionsController < ApplicationController
     end
 
     raise Exceptions::ByFireBePurgedError, 'Error attempting to find account' unless @account
-    
+
     @account.key ||= SecureRandom.uuid
     @account.battletag = auth_hash['info']['battletag']
-    
+
     raise Exceptions::ByFireBePurgedError, 'Error attempting to update account' unless @account.save
 
     # Now create a session for this user
@@ -107,8 +107,7 @@ class SessionsController < ApplicationController
     @@bnet.characters(@session.access_token).each do |character|
       guild = nil
       if character['guild'].present? and character['guildRealm'].present?
-        guild = Guild.find_or_create_by(:name => character['guild'],
-                                        :realm => character['guildRealm'])
+        guild = update_guild(character['guild'], character['guildRealm'])
       end
 
       c = Character.find_or_initialize_by(:account_id => @session.account_id,
@@ -123,6 +122,23 @@ class SessionsController < ApplicationController
 
       c.update(:item_level => @@bnet.ilvl(c.name, c.realm)) if c.level >= 100
     end
+  end
+
+  def update_guild(name, realm)
+    guild = Guild.find_or_create_by(:name => name,
+                                    :realm => realm)
+
+    if guild
+      response = @@bnet.guild(name, realm)
+      emblem = response['emblem']
+      guild.update(:icon => emblem['icon'],
+                   :border => emblem['border'],
+                   :icon_color => emblem['iconColor'],
+                   :border_color => emblem['borderColor'],
+                   :background_color => emblem['backgroundColor'])
+    end
+
+    return guild
   end
 
   # Full image url from api character data

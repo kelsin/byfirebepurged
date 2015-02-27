@@ -14,5 +14,5 @@ after_success:
   - "chmod 0600 config/deploy_id_rsa"
   - eval "$(ssh-agent)"
   - ssh-add config/deploy_id_rsa
-  - "[[ $TRAVIS_BRANCH = 'master' ]] && bundle exec cap production deploy"
-  - "[[ $TRAVIS_BRANCH = 'develop' ]] && bundle exec cap staging deploy"
+  - "[[ $TRAVIS_BRANCH = 'master' ]] && bundle exec cap production deploy:migrate deploy"
+  - "[[ $TRAVIS_BRANCH = 'develop' ]] && bundle exec cap staging deploy:migrate deploy"

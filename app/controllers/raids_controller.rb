@@ -1,27 +1,14 @@
 class RaidsController < ApplicationController
   def index
     authorize! :read, Raid
+
     @raids = @account.available_raids
 
     @raids.each do |raid|
       authorize! :read, raid
     end
 
-    @all_signups = @raids.inject([]) do |signups, raid|
-      signups + raid.signups
-    end.uniq.compact.sort
-    @all_characters = @all_signups.map(&:character).uniq.sort
-    @all_accounts = (@raids.map(&:account) + @all_characters.map(&:account)).uniq.sort
-    @all_guilds = @raids.inject([]) do |guilds, raid|
-      guilds + raid.guilds
-    end.uniq.compact.sort
-    @all_permissions = @raids.inject([]) do |permissions, raid|
-      if can? :manage, raid
-        raid.permissions
-      else
-        []
-      end + permissions
-    end.uniq.compact.sort
+    add_other_data
   end
 
   def show
@@ -43,6 +30,10 @@ class RaidsController < ApplicationController
     @raid = Raid.new(converted_params)
     @raid.account = @account
     @raid.permissions << Permission.new(:key => @account.to_permission, :level => 'admin')
+
+    if @raid.guild
+      @raid.permissions << Permission.new(:key => @raid.guild.to_permission, :level => 'member')
+    end
 
     raise Exceptions::ByFireBePurgedError, 'Error saving raid' unless @raid.save
     render :show
@@ -66,5 +57,23 @@ class RaidsController < ApplicationController
                                  :guild, :guild_id,
                                  :groups, :size, :tanks, :healers,
                                  :requiredLevel, :requiredItemLevel)
+  end
+
+  def add_other_data
+    @all_signups = @raids.inject([]) do |signups, raid|
+      signups + raid.signups
+    end.uniq.compact.sort
+    @all_characters = @all_signups.map(&:character).uniq.sort
+    @all_accounts = (@raids.map(&:account) + @all_characters.map(&:account)).uniq.sort
+    @all_guilds = @raids.inject([]) do |guilds, raid|
+      guilds + raid.guilds
+    end.uniq.compact.sort
+    @all_permissions = @raids.inject([]) do |permissions, raid|
+      if can? :manage, raid
+        raid.permissions
+      else
+        []
+      end + permissions
+    end.uniq.compact.sort
   end
 end

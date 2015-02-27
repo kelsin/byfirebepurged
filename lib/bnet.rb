@@ -12,9 +12,17 @@ class Bnet
     response['characters'] || []
   end
 
+  # Loads a guild from the wow api
+  def guild(name, realm)
+    self.class.get("/wow/guild/#{URI.escape realm}/#{URI.escape name}",
+                   :query => {
+                     'apikey' => ENV['BNET_KEY']
+                   })
+  end
+
   # Loads a character from the wow api
   def character(name, realm)
-    self.class.get("/wow/character/#{CGI::escape realm}/#{CGI::escape name}",
+    self.class.get("/wow/character/#{URI.escape realm}/#{URI.escape name}",
                    :query => {
                      'fields' => 'items',
                      'apikey' => ENV['BNET_KEY']
