@@ -135,7 +135,7 @@ class SessionsController < ApplicationController
                    :border => emblem['border'],
                    :icon_color => emblem['iconColor'],
                    :border_color => emblem['borderColor'],
-                   :background_color => emblem['backgroundColor'])
+                   :background_color => emblem['backgroundColor']) if emblem
     end
 
     return guild
