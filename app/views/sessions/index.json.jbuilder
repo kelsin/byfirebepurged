@@ -10,6 +10,7 @@ json.api do
 end
 
 json.env Rails.env
+json.revision app_revision
 
 json.sites do
   json.website 'http://byfirebepurged.com/'
