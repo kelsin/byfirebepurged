@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_account, :roles
 
-  before_filter :default_format
+  before_action :default_format
 
   private
 
