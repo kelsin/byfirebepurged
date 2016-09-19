@@ -16,8 +16,8 @@ end
 
 SimpleCov.start 'rails' do
   merge_timeout 1800
-  formatter SimpleCov::Formatter::MultiFormatter[SimpleCov::Formatter::HTMLFormatter,
-                                                 CodeClimate::TestReporter::Formatter]
+  formatter SimpleCov::Formatter::MultiFormatter.new([SimpleCov::Formatter::HTMLFormatter,
+                                                      CodeClimate::TestReporter::Formatter])
 end
 
 OmniAuth.config.test_mode = true
