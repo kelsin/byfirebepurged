@@ -7,6 +7,7 @@ RSpec.describe "Index Api", :type => :api do
 
       expect(last_response).to be_ok
       expect(last_response.body).to be_json_eql("test".to_json).at_path('env')
+      expect(last_response.body).to be_json_eql("unknown".to_json).at_path('revision')
       expect(last_response.body).to be_json_eql("http://example.org/login".to_json).at_path('api/login')
       expect(last_response.body).to be_json_eql("http://example.org/account".to_json).at_path('api/account')
       expect(last_response.body).to be_json_eql("http://example.org/raids".to_json).at_path('api/raids')
