@@ -13,7 +13,7 @@
 
 ActiveRecord::Schema.define(version: 20150227213455) do
 
-  create_table "accounts", force: true do |t|
+  create_table "accounts", force: :cascade do |t|
     t.string   "battletag"
     t.string   "account_id"
     t.boolean  "admin",      default: false, null: false
@@ -22,7 +22,9 @@ ActiveRecord::Schema.define(version: 20150227213455) do
     t.string   "key",                        null: false
   end
 
-  create_table "characters", force: true do |t|
+  add_index "accounts", ["account_id"], name: "index_accounts_on_account_id"
+
+  create_table "characters", force: :cascade do |t|
     t.integer  "account_id"
     t.integer  "guild_id"
     t.string   "name"
@@ -41,7 +43,7 @@ ActiveRecord::Schema.define(version: 20150227213455) do
   add_index "characters", ["guild_id"], name: "index_characters_on_guild_id"
   add_index "characters", ["name", "realm"], name: "index_characters_on_name_and_realm"
 
-  create_table "class_roles", force: true do |t|
+  create_table "class_roles", force: :cascade do |t|
     t.integer "role_id"
     t.integer "class_id"
   end
@@ -49,12 +51,11 @@ ActiveRecord::Schema.define(version: 20150227213455) do
   add_index "class_roles", ["class_id"], name: "index_class_roles_on_class_id"
   add_index "class_roles", ["role_id"], name: "index_class_roles_on_role_id"
 
-  create_table "guilds", force: true do |t|
+  create_table "guilds", force: :cascade do |t|
     t.string   "name"
     t.string   "realm"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "backgroun_color"
     t.integer  "icon"
     t.integer  "border"
     t.string   "icon_color"
@@ -64,7 +65,7 @@ ActiveRecord::Schema.define(version: 20150227213455) do
 
   add_index "guilds", ["name", "realm"], name: "index_guilds_on_name_and_realm"
 
-  create_table "logins", force: true do |t|
+  create_table "logins", force: :cascade do |t|
     t.string   "key",        null: false
     t.string   "redirect",   null: false
     t.datetime "created_at"
@@ -72,8 +73,9 @@ ActiveRecord::Schema.define(version: 20150227213455) do
   end
 
   add_index "logins", ["key", "created_at"], name: "index_logins_on_key_and_created_at"
+  add_index "logins", ["key"], name: "index_logins_on_key"
 
-  create_table "permissions", force: true do |t|
+  create_table "permissions", force: :cascade do |t|
     t.integer  "permissioned_id",   null: false
     t.string   "permissioned_type", null: false
     t.string   "level",             null: false
@@ -82,7 +84,7 @@ ActiveRecord::Schema.define(version: 20150227213455) do
     t.datetime "updated_at"
   end
 
-  create_table "raids", force: true do |t|
+  create_table "raids", force: :cascade do |t|
     t.string   "name",                              null: false
     t.datetime "date",                              null: false
     t.text     "note"
@@ -101,9 +103,10 @@ ActiveRecord::Schema.define(version: 20150227213455) do
   end
 
   add_index "raids", ["account_id"], name: "index_raids_on_account_id"
+  add_index "raids", ["date"], name: "index_raids_on_date"
   add_index "raids", ["guild_id"], name: "index_raids_on_guild_id"
 
-  create_table "roles", force: true do |t|
+  create_table "roles", force: :cascade do |t|
     t.string   "name"
     t.string   "slug"
     t.string   "icon"
@@ -111,7 +114,9 @@ ActiveRecord::Schema.define(version: 20150227213455) do
     t.datetime "updated_at"
   end
 
-  create_table "roles_signups", id: false, force: true do |t|
+  add_index "roles", ["slug"], name: "index_roles_on_slug"
+
+  create_table "roles_signups", id: false, force: :cascade do |t|
     t.integer "role_id"
     t.integer "signup_id"
   end
@@ -119,7 +124,7 @@ ActiveRecord::Schema.define(version: 20150227213455) do
   add_index "roles_signups", ["role_id"], name: "index_roles_signups_on_role_id"
   add_index "roles_signups", ["signup_id"], name: "index_roles_signups_on_signup_id"
 
-  create_table "sessions", force: true do |t|
+  create_table "sessions", force: :cascade do |t|
     t.integer  "account_id",   null: false
     t.string   "key",          null: false
     t.string   "access_token", null: false
@@ -128,8 +133,9 @@ ActiveRecord::Schema.define(version: 20150227213455) do
   end
 
   add_index "sessions", ["account_id"], name: "index_sessions_on_account_id"
+  add_index "sessions", ["key"], name: "index_sessions_on_key"
 
-  create_table "signups", force: true do |t|
+  create_table "signups", force: :cascade do |t|
     t.integer  "raid_id"
     t.integer  "character_id"
     t.string   "note"
