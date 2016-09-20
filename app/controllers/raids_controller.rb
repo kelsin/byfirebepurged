@@ -20,14 +20,14 @@ class RaidsController < ApplicationController
   def update
     @raid = Raid.find(params[:id])
     authorize! :update, @raid
-    raise Exceptions::ByFireBePurgedError, 'Error saving raid' unless @raid.update(converted_params)
+    raise Exceptions::ByFireBePurgedError, 'Error saving raid' unless @raid.update(allowed_params)
     render :show
   end
 
   def create
     authorize! :create, Raid
 
-    @raid = Raid.new(converted_params)
+    @raid = Raid.new(allowed_params)
     @raid.account = @account
     @raid.permissions << Permission.new(:key => @account.to_permission, :level => 'admin')
 
@@ -53,10 +53,13 @@ class RaidsController < ApplicationController
   end
 
   def allowed_params
-    params.require(:raid).permit(:name, :date, :finalized, :note, :hidden,
-                                 :guild, :guild_id,
-                                 :groups, :size, :tanks, :healers,
-                                 :requiredLevel, :requiredItemLevel)
+    params
+      .require(:raid)
+      .permit(:name, :date, :finalized, :note, :hidden,
+              :guild, :guild_id,
+              :groups, :size, :tanks, :healers,
+              :requiredLevel, :requiredItemLevel)
+      .transform_keys { |k| mappings[k.to_sym] || k }
   end
 
   def add_other_data

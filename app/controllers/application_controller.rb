@@ -53,12 +53,6 @@ class ApplicationController < ActionController::Base
     @roles ||= Role.includes(:class_roles).all
   end
 
-  def converted_params
-    allowed_params.map do |k, v|
-      [mappings[k.to_sym] || k.to_sym, v]
-    end.to_h
-  end
-
   def unauthorized(e)
     render :json => {:error => e.message}, :status => :unauthorized
   end
