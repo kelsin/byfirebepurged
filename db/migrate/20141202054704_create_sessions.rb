@@ -1,4 +1,4 @@
-class CreateSessions < ActiveRecord::Migration
+class CreateSessions < ActiveRecord::Migration[3.1]
   def change
     create_table :sessions do |t|
       t.references :account, :null => false, :index => true

@@ -1,4 +1,4 @@
-class CreateCharacters < ActiveRecord::Migration
+class CreateCharacters < ActiveRecord::Migration[3.1]
   def change
     create_table :characters do |t|
       t.references :account, :index => true

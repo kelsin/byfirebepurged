@@ -1,4 +1,4 @@
-class CreatePermissions < ActiveRecord::Migration
+class CreatePermissions < ActiveRecord::Migration[3.1]
   def change
     create_table :permissions do |t|
       t.references :permissioned, :polymorphic => true, :null => false
