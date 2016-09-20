@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+
+  # Json API Version
+  scope module: :jsonapi, constraints: lambda { |r| r.format == :jsonapi } do
+    jsonapi_resources :raids
+  end
+
   # Raids
   resources :raids do
     resources :signups
