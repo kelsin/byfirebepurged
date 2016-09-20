@@ -22,7 +22,6 @@ require 'rspec/rails'
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
-load Rails.root.join("db", "schema.rb")
 ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
