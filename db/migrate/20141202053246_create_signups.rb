@@ -1,4 +1,4 @@
-class CreateSignups < ActiveRecord::Migration[3.1]
+class CreateSignups < ActiveRecord::Migration[4.2]
   def change
     create_table :signups do |t|
       t.references :raid, :index => true

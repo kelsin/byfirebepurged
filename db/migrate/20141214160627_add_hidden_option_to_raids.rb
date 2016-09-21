@@ -1,4 +1,4 @@
-class AddHiddenOptionToRaids < ActiveRecord::Migration[3.1]
+class AddHiddenOptionToRaids < ActiveRecord::Migration[4.2]
   def change
     change_table :raids do |t|
       t.boolean :hidden, :default => true, :null => false

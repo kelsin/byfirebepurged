@@ -1,4 +1,4 @@
-class AddGuildToRaid < ActiveRecord::Migration[3.1]
+class AddGuildToRaid < ActiveRecord::Migration[4.2]
   def change
     change_table :raids do |t|
       t.references :guild, :index => true

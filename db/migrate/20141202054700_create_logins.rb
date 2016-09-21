@@ -1,4 +1,4 @@
-class CreateLogins < ActiveRecord::Migration[3.1]
+class CreateLogins < ActiveRecord::Migration[4.2]
   def change
     create_table :logins do |t|
       t.string :key, :null => false, :index => true

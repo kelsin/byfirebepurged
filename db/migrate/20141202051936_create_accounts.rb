@@ -1,4 +1,4 @@
-class CreateAccounts < ActiveRecord::Migration[3.1]
+class CreateAccounts < ActiveRecord::Migration[4.2]
   def change
     create_table :accounts do |t|
       t.string 'battletag'

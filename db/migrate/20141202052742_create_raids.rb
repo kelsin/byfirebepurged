@@ -1,4 +1,4 @@
-class CreateRaids < ActiveRecord::Migration[3.1]
+class CreateRaids < ActiveRecord::Migration[4.2]
   def change
     create_table :raids do |t|
       t.string :name, :null => false

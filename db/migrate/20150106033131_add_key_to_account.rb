@@ -1,4 +1,4 @@
-class AddKeyToAccount < ActiveRecord::Migration[3.1]
+class AddKeyToAccount < ActiveRecord::Migration[4.2]
   def change
     add_column :accounts, :key, :string, :null => true
 
