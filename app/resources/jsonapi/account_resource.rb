@@ -1,5 +1,6 @@
 class Jsonapi::AccountResource < JSONAPI::Resource
-  attributes :account_id, :battletag, :permission
+  attributes :account_id, :battletag
+  attribute :permission, delegate: :to_permission
 
   has_many :characters
   has_many :signups
