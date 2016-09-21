@@ -1,8 +1,8 @@
 class Jsonapi::CharacterResource < JSONAPI::Resource
   attributes :name, :realm, :class_id, :race_id, :gender_id,
              :level, :item_level,
-             :image_url, :permission,
-             :created_at, :updated_at
+             :image_url, :created_at, :updated_at
+  attribute :permission, :delegate => :to_permission
 
   has_one :account
   has_one :guild
