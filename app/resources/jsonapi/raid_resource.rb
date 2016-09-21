@@ -1,8 +1,8 @@
 class Jsonapi::RaidResource < JSONAPI::Resource
   attributes :name, :date, :note, :finalized,
-             :account_id, :groups, :size, :tanks,
+             :groups, :size, :tanks,
              :healers, :requiredLevel, :requiredItemLevel,
-             :created_at, :updated_at, :hidden, :guild_id
+             :created_at, :updated_at, :hidden
 
   def self.updatable_fields(context)
     super - [:created_at, :updated_at]
@@ -16,4 +16,9 @@ class Jsonapi::RaidResource < JSONAPI::Resource
     [{field: 'date', direction: :desc},
      {field: 'name', direction: :asc}]
   end
+
+  has_one :account
+  has_one :guild
+  has_many :signups
+  has_many :permissions
 end
