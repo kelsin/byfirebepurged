@@ -8,9 +8,6 @@ gem 'rails', '5.0.0.1'
 # Use mysql2 in production
 gem 'mysql2'
 
-# JSON API Compliance
-gem 'jsonapi-resources'
-
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 
