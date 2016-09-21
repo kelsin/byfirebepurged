@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_account, :roles
 
-  before_filter :default_format
+  before_action :default_format
 
   private
 
@@ -51,12 +51,6 @@ class ApplicationController < ActionController::Base
 
   def roles
     @roles ||= Role.includes(:class_roles).all
-  end
-
-  def converted_params
-    allowed_params.map do |k, v|
-      [mappings[k.to_sym] || k.to_sym, v]
-    end.to_h
   end
 
   def unauthorized(e)

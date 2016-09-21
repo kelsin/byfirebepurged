@@ -9,6 +9,11 @@ env:
     - secure: "NEnbDUfDJmD/YYyUpE8pgVYJIB/Gb+Tbcsze3SmJ795eKJlT9kzTw3hwmhH41QNLzwHnQg1gZQ7agfpmO4eWPFLgiCgMQXLOc9eU5uvUj7kVFLqB9PZVCYlvU7pm3YvQ5uySbg7KRmaO5HAQdFphpH6fvFg7ZvQynjMq/+V6kwk="
 cache:
   bundler: true
+before_script:
+  - "bundle exec rake db:migrate"
+after_failure:
+  - "cat config/database.yml"
+  - "bundle exec rake db:migrate:status"
 after_success:
   - "openssl aes-256-cbc -k $DEPLOY_KEY -in config/deploy_id_rsa_enc -d -a -out config/deploy_id_rsa"
   - "chmod 0600 config/deploy_id_rsa"

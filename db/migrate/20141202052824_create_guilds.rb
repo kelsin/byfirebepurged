@@ -1,4 +1,4 @@
-class CreateGuilds < ActiveRecord::Migration
+class CreateGuilds < ActiveRecord::Migration[3.1]
   def change
     create_table :guilds do |t|
       t.string :name

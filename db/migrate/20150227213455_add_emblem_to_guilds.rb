@@ -1,4 +1,4 @@
-class AddEmblemToGuilds < ActiveRecord::Migration
+class AddEmblemToGuilds < ActiveRecord::Migration[3.1]
   def change
     change_table :guilds do |t|
       t.integer :icon

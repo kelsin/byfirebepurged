@@ -1,4 +1,4 @@
-class CreateRoles < ActiveRecord::Migration
+class CreateRoles < ActiveRecord::Migration[3.1]
   def change
     create_table :roles do |t|
       t.string 'name'
@@ -21,7 +21,7 @@ class CreateRoles < ActiveRecord::Migration
     healing = Role.create(:name => 'Healing', :slug => 'healing', :icon => 'ambulance')
     tank    = Role.create(:name => 'Tank', :slug => 'tank', :icon => 'shield')
 
-    (1..11).each do |class_id|
+    (1..12).each do |class_id|
       ClassRole.create(:role => dps, :class_id => class_id)
     end
 
@@ -29,7 +29,7 @@ class CreateRoles < ActiveRecord::Migration
       ClassRole.create(:role => healing, :class_id => class_id)
     end
 
-    [1, 2, 6, 10, 11].each do |class_id|
+    [1, 2, 6, 10, 11, 12].each do |class_id|
       ClassRole.create(:role => tank, :class_id => class_id)
     end
   end
