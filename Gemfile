@@ -11,6 +11,9 @@ gem 'mysql2'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 
+# Puma web server
+gem 'puma'
+
 # Battle.net API calls
 gem 'httparty'
 

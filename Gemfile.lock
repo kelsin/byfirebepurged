@@ -167,6 +167,7 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    puma (3.6.0)
     rack (2.0.1)
     rack-cors (0.4.0)
     rack-test (0.6.3)
@@ -279,6 +280,7 @@ DEPENDENCIES
   mysql2
   newrelic_rpm
   omniauth-bnet
+  puma
   rack-cors
   rack-test
   rails (= 5.0.0.1)
