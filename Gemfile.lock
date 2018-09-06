@@ -112,7 +112,7 @@ GEM
     multi_json (1.10.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
-    mysql2 (0.3.17)
+    mysql2 (0.4.10)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.1)
@@ -238,7 +238,7 @@ DEPENDENCIES
   httparty
   jbuilder (~> 2.0)
   json_spec
-  mysql2
+  mysql2 (~> 0.4.0)
   newrelic_rpm
   omniauth-bnet
   rack-cors
@@ -251,3 +251,9 @@ DEPENDENCIES
   thin
   vcr
   webmock
+
+RUBY VERSION
+   ruby 2.1.3p242
+
+BUNDLED WITH
+   1.16.4
