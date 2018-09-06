@@ -37,7 +37,7 @@ group :development, :test do
   gem 'capistrano-rails'
   gem 'capistrano-passenger'
   gem 'capistrano-bundler'
-  gem 'capistrano-rbenv'
+  gem 'capistrano-chruby'
 
   # Guard
   gem 'guard-rspec', require: false
