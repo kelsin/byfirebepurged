@@ -143,6 +143,6 @@ class SessionsController < ApplicationController
 
   # Full image url from api character data
   def image_url(character)
-    "https://us.battle.net/static-render/us/#{character['thumbnail']}?alt=wow/static/images/2d/avatar/#{character['race']}-#{character['gender']}.jpg"
+    "https://render-us.worldofwarcraft.com/character/#{character['thumbnail']}?alt=/wow/static/images/2d/avatar/#{character['race']}-#{character['gender']}.jpg"
   end
 end
