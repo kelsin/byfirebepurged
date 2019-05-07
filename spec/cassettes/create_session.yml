@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://us.api.battle.net/wow/user/characters
+    uri: https://us.api.blizzard.com/wow/user/characters
     body:
       encoding: US-ASCII
       string: ''
@@ -14,25 +14,23 @@ http_interactions:
       code: 401
       message: Unauthorized
     headers:
-      Content-Type:
-      - application/json
-      Date:
-      - Wed, 10 Dec 2014 05:17:41 GMT
-      Server:
-      - Mashery Proxy
-      Www-Authenticate:
-      - Bearer realm="us.api.battle.net", error="invalid_token"
-      X-Mashery-Error-Code:
-      - ERR_403_DEVELOPER_INACTIVE
-      X-Mashery-Responder:
-      - prod-j-worker-us-east-1d-53.mashery.com
       Content-Length:
-      - '61'
+      - '0'
+      X-Trace-Traceid:
+      - 158d2cee-4a01-1f20-e4b7-fa164c5fa279
+      X-Trace-Spanid:
+      - 158d2cee-4a01-2050-e4b7-fa164c5fa279
+      X-Trace-Parentspanid:
+      - 158d2cee-4a01-1f60-e4b7-fa164c5fa279
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
       Connection:
       - keep-alive
     body:
       encoding: UTF-8
-      string: '{"code":403, "type":"Forbidden", "detail":"Account Inactive"}'
+      string: ''
     http_version: 
-  recorded_at: Wed, 10 Dec 2014 05:17:43 GMT
+  recorded_at: Tue, 07 May 2019 01:57:24 GMT
 recorded_with: VCR 2.9.3
