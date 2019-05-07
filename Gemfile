@@ -24,7 +24,7 @@ gem 'rack-cors', :require => 'rack/cors'
 gem 'cancan'
 
 # Omniauth-Bnet for Authentication
-gem 'omniauth-bnet'
+gem 'omniauth-bnet', '~> 2.0.0'
 
 group :development, :test do
   # Use Thin for development
