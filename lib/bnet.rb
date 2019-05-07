@@ -1,6 +1,6 @@
 class Bnet
   include HTTParty
-  base_uri 'https://us.api.battle.net'
+  base_uri 'https://us.api.blizzard.com'
 
   # Loads the list of wow characters given a user's oauth access token
   def characters(access_token)
